@@ -1,0 +1,110 @@
+[
+	{
+		"containerType" : "welcome",
+		"heading" : "What kind of traveller are you?",
+		"contents" : "For the best experiences in Australia, we have created travel styles to suit who you are. You might be a Nature Seeker? Eco Indulger? Food Fanatic? Active Adventurer? Or maybe a Coastal Cruiser? Our fun quiz will help you find what kind of traveller you are and reveal the best Australian experiences to you. /n Take the quiz now to be in to win a $10,000 experience flying Qantas /n Check out this weeks Sunday Star Times for a promo code that gets you an additional entry into the competition!"
+	},
+
+	{
+		"containerType" : "questionText",
+		"heading" : "This is question one title",
+		"contents" : [
+			{
+				"answer" : "This is the answer one",
+				"weight" : [0,1,2,3,4]
+			},
+			{
+				"answer" : "This is the answer two",
+				"weight" : [4,0,1,2,3]
+			},
+			{
+				"answer" : "This is the answer three",
+				"weight" : [3,4,0,1,2]
+			},
+			{
+				"answer" : "This is the answer four",
+				"weight" : [2,3,4,0,1]
+			},
+			{
+				"answer" : "This is the answer five",
+				"weight" : [1,2,3,4,0]
+			}
+		]
+	},
+
+	{
+		"containerType" : "questionImage",
+		"heading" : "This is question two title",
+		"contents" : [
+			{
+				"answer" : "-temp-image-1.jpg",
+				"weight" : [4,0,1,2,3]
+			},
+			{
+				"answer" : "-temp-image-2.jpg",
+				"weight" : [3,4,0,1,2]
+			},
+			{
+				"answer" : "-temp-image-3.jpg",
+				"weight" : [2,3,4,0,1]
+			},
+			{
+				"answer" : "-temp-image-4.jpg",
+				"weight" : [1,2,3,4,0]
+			},
+			{
+				"answer" : "-temp-image-5.jpg",
+				"weight" : [0,1,2,3,4]
+			}
+		]
+	},
+
+	{
+		"containerType" : "results",
+		"heading" : "Congratulations you are a",
+		"userPrompt" : "Change profiles",
+		"profiles" : [
+			{
+				"kind" : "Active Adventurer",
+				"blurb" : "This is the Active Adventurer blurb",
+				"url" : "www.stuff.co.nz/active-adventurer"
+			},
+			{
+				"kind" : "Coastal Cruiser",
+				"blurb" : "This is the Coastal Cruiser blurb",
+				"url" : "www.stuff.co.nz/coastal-cruiser"
+			},
+			{
+				"kind" : "Eco Induldger",
+				"blurb" : "This is the Eco Induldger blurb",
+				"url" : "www.stuff.co.nz/eco-induldger"
+			},
+			{
+				"kind" : "Food Fanatic",
+				"blurb" : "This is the Food Fanatic blurb",
+				"url" : "www.stuff.co.nz/food-fanatic"
+			},
+			{
+				"kind" : "Nature Lover",
+				"blurb" : "This is the Nature Lover blurb",
+				"url" : "www.stuff.co.nz/nature-lover"
+			}
+		]
+	},
+
+	{
+		"containerType" : "userForm"
+	},
+
+	{
+		"containerType" : "social",
+		"heading" : "Share and get an extra entry into the competition",
+		"contents" : "Click on the social media icons below to get your friends and family involved and find out their traveller profile, plus by sharing you'll get an extra entry into the draw! The message below will be posted into your chosen social streams(s)."
+	},
+
+	{
+		"containerType" : "thankyou",
+		"heading" : "???",
+		"contents" : "XXX"
+	}
+]

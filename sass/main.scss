@@ -1,0 +1,869 @@
+@import "compass/css3";
+
+@import url(http://fonts.googleapis.com/css?family=Roboto:100,300);
+
+*, *:after, *:before {
+	@include box-sizing(border-box);
+}
+
+.clear-fix:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+// generic values
+$ani: 0.25s;
+$pad: 20px; // generic
+
+$icon: 2.5rem;
+
+$thick: 0.15rem;
+
+$offset: 2.25rem;
+
+// color values
+
+$divider: rgba(white, 0.25);
+
+$shadow: rgba(black, 0.5);
+
+$gray: #787878; // generic
+$grayD: darken($gray, 25%); // dark
+$grayL: lighten($gray, 35%); // light
+$graySL: lighten($gray, 45%); // super light
+
+$blue: #00b4ff;
+$blueD: #005375;
+
+$red: red;
+
+@mixin vendorize($property, $value) {
+	-webkit-#{$property}: $value;
+	-moz-#{$property}: $value;
+	-ms-#{$property}: $value;
+	-o-#{$property}: $value;
+	#{$property}: $value;
+}
+
+@mixin pseudo{
+	position: absolute;
+	display: block;
+	content: "";
+}
+
+@mixin keyframes($aniName){
+
+    @-webkit-keyframes $aniName{
+        @content;
+    }
+    @-moz-keyframes $aniName{
+        @content;
+    }
+    @-o-keyframes $aniName{
+        @content;
+    }
+    @keyframes $aniName{
+        @content;
+    }
+}
+
+html, body{
+	height: 100%;
+	overflow-x: hidden;
+	width: 100%;
+}
+
+h2, .h2{
+	margin: 0;
+	padding: 0;
+	font: {
+		weight: 300;
+		size: 30px;
+	}
+}
+
+h3, .h3{
+	margin: 0;
+	padding: 0;
+	font: {
+		weight: 300;
+		size: 25px;
+	}
+}
+
+h4, .h4{
+	margin: 0;
+	padding: 0;
+	font: {
+		weight: 300;
+		size: 20px;
+	}
+}
+
+hr{
+	background: {
+		image: url(../img/transparent-sprite.png);
+		position: 0 -540px;
+		repeat: repeat-x;
+	}
+	border: 0;
+	height: $pad / 2;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+
+.module{
+	background:{
+		image: url(../img/module-bg.jpg);
+		background-position: center 0;
+	}
+	border: 2px solid white;
+	font: {
+		family: 'Roboto', sans-serif;
+		weight: 200;
+		style: normal;
+	}
+	margin: 50px auto 0 auto;
+	padding: $pad * 2;
+	position: relative;
+	width: 920px;
+	z-index: 0;
+	@include border-radius($pad);
+	@include box-shadow(0 0 $pad 0 rgba(black, 0.5));
+
+	&:before{
+		@include pseudo;
+		background: {
+			//color: red;
+			image: url(../img/transparent-sprite.png);
+			position: 0 -360px;
+			repeat: no-repeat;
+		}
+		height: 30px;
+		left: 0;
+		margin: 2px 0 0 0; // bump shadow down past border
+		top: 100%;
+		width: 100%;
+	}
+}
+
+.container-shadow{
+	@include border-radius($pad);
+	@include box-shadow(0 0 $pad 0 rgba(black, 0.5));	
+}
+
+.main-heading{
+	background-color: rgba($blue, 0.9);
+	color: white;
+	position: relative;
+	@include border-radius(($pad / 2) ($pad / 2) 0 0);
+
+	&:before{
+		@include pseudo;
+		background: {
+			image: url(../img/transparent-sprite.png);
+			position: 0 -20px;
+			repeat: no-repeat;
+		}
+		height: $pad;
+		left: 0;
+		top: 100%;
+		width: 100%;
+	}
+
+	.icon{
+		background: {
+			image: url(../img/transparent-sprite.png);
+			repeat: no-repeat;
+		}
+		height: 100px;
+		left: -73px;
+		margin: -50px 0 0 0;
+		position: absolute;
+		top: 50%;
+		width: 112px;
+	}
+}
+
+.main-content{
+	background-color: rgba(white, 0.9);
+	color: $blueD;
+	font: {
+		weight: 300;
+		size: 20px;
+	}
+}
+
+.progress{
+	padding: $pad / 2;
+
+	.visual{
+		display: inline-block;
+		height: 100%;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		position: relative;
+		width: 650px;
+
+		li{
+			bottom: 0;
+			display: inline-block;
+			height: 100%;
+			position: relative;
+			top: 0;
+			//width: 20%; to be decided via javascript...
+
+			&:after{
+				$wth: 4px;
+				@include pseudo;
+				background-color: rgba(white, 0.5);
+				height: $wth;
+				left: 50%;
+				margin: -8px 0 0 (- $wth / 2);
+				top: 50%;
+				width: $wth;
+				@include border-radius(50%);
+			}
+
+			&.active:after{
+				$wth: $pad;
+				@include pseudo;
+				background-color: white;
+				height: $wth;
+				left: 50%;
+				margin: -16px 0 0 (- $wth / 2);
+				top: 50%;
+				width: $wth;
+				@include border-radius(50%);
+			}
+		}
+	}
+
+	.text{
+		color: white;
+		display: inline-block;
+	}
+}
+
+.footer{
+	background-color: rgba($blue, 0.9);
+	min-height: $pad;
+	padding: $pad / 2;
+	position: relative;	
+	@include border-radius(0 0 ($pad / 2) ($pad / 2));
+
+	&:before{
+		@include pseudo;
+		background: {
+			image: url(../img/transparent-sprite.png);
+			position: 0 0;
+			repeat: no-repeat;
+		}
+		bottom: 100%;
+		height: $pad;
+		left: 0;
+		width: 100%;
+	}
+}
+
+.btn{
+	cursor: pointer;
+	font: {
+		weight: 300;
+		size: 25px;
+	}
+}
+
+.btn.nav{
+	background-color: $blueD;
+	border: {
+		color: white;
+		style: solid;
+		width: 2px;
+	};
+	color: white;
+	display: inline-block;
+	padding: ($pad / 1.5) ($pad * 1.5) ($pad / 1.5) ($pad * 1.5);
+	position: relative;
+	@include border-radius($pad / 2);
+
+	&[data-state="over"]{
+		background-color: $blue;
+		
+		.icon{
+			background-position: -342px -140px;
+		}
+	}
+
+	.icon{
+		background: {
+			image: url(../img/transparent-sprite.png);
+			position: -230px -140px;
+			repeat: no-repeat;
+		}
+		height: 100px;
+		left: -95px; // max left pos during animation
+		//left: -80px; // min left pos during animation
+		margin: -50px 0 0 0;
+		position: absolute;
+		top: 50%;
+		width: 112px;
+	}
+}
+
+.container-shadow[data-type="welcome"]{
+
+	.main-heading{
+		padding: ($pad / 2) $pad ($pad / 2) $pad;
+	}
+
+	.main-content{
+		padding: $pad $pad $pad $pad;
+
+		.intro{
+			padding: 0 0 $pad 0;	
+		}
+	}
+}
+
+.container-shadow[data-type="questionText"]{
+
+	.main-heading{
+		padding: ($pad / 2) ($pad / 2) ($pad / 2) ($pad * 2);
+
+		.icon{
+			background-position: 0 -40px;		
+		}
+	}
+
+	.main-content{
+		list-style: none;
+		margin: 0;
+		padding: $pad $pad $pad ($pad * 2);
+
+		li{
+			border: {
+				color: transparent;
+				style: solid;
+				width: 2px;
+			};
+			padding: ($pad / 1.5) $pad ($pad / 1.5) $pad;
+			position: relative;
+			@include border-radius($pad / 2);
+
+			&[data-state="over"], &[data-state="active"]{
+				border-color: white;
+				color: white;
+				@include box-shadow(0 0 $pad 0 rgba(black, 0.5));
+			}
+
+			&[data-state="over"]{
+				background-color: $blueD;
+			}
+
+			&[data-state="active"]{
+				background-color: $blue;
+
+				.icon{
+					background-position: -112px -140px;
+				}
+			}
+
+			.icon{
+				display: none;
+				background: {
+					image: url(../img/transparent-sprite.png);
+					position: 0 -140px;
+					repeat: no-repeat;
+				}
+				height: 100px;
+				//left: -90px; // mouseenter state
+				left: -115px;
+				margin: -50px 0 0 0;
+				position: absolute;
+				top: 50%;
+				width: 112px;
+				@include box-shadow(0 0 $pad 0 rgba(0, 0, 0, 0));
+				@include opacity(0);
+			}
+		}
+	}
+}
+
+
+.container-shadow[data-type="questionImage"]{
+
+	.main-heading{
+		padding: ($pad / 2) ($pad / 2) ($pad / 2) ($pad * 3);
+
+		.icon{
+			background-position: 0 -40px;
+		}
+	}
+
+	.main-content{
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		position: relative;
+		z-index: 0;
+
+		li{
+			$hgt: 250px;
+			$wth: 143px;
+			background: {
+				image: url(../img/-temp-image-1.jpg); // temp!
+				position: 0 0;
+				repeat: no-repeat;
+			}
+			border: 2px solid white;
+			display: inline-block;
+			height: $hgt;
+			margin: ($pad * 2) 0 ($pad * 2) $pad;
+			position: relative;
+			width: $wth;
+			@include border-radius($pad / 2);
+			@include box-shadow(0 0 ($pad / 2) 0 rgba(black, 0.15));
+
+			&:before{
+				$thick: 2px;
+				position: absolute;
+				content: "";
+				display: none;
+				border: $thick solid white;
+				height: $hgt + $pad;
+				left: (- $pad - ($thick * 2)) / 2;
+				top: (- $pad - ($thick * 2)) / 2;
+				width: $wth + $pad;
+				z-index: -1 !important;
+				@include border-radius($pad);
+				@include box-shadow(0 0 $pad 0 rgba(black, 0.5));
+			}
+
+			&[data-state="over"]:before{
+				background-color: $blueD;
+				display: block;
+			}
+
+			&[data-state="active"]{
+
+				&:before{
+					background-color: $blue;
+					display: block;
+				}
+
+				.icon{
+					background-position: -112px -240px;
+				}
+			}
+
+			.icon{
+				display: none;
+				background: {
+					image: url(../img/transparent-sprite.png);
+					position: 0 -240px;
+					repeat: no-repeat;
+				}
+				height: 100px;
+				// left: -70px; // mouseenter state
+				left: -90px;
+				position: absolute;
+				// top: -70px; // mouseenter state
+				top: -90px;
+				width: 100px;
+				@include opacity(0);
+			}
+		}
+	}
+}
+
+.container-shadow[data-type="results"]{
+
+	.main-heading{
+		padding: ($pad / 2) $pad ($pad / 2) $pad;
+	}
+
+	.main-content{
+		$img: 250px;
+		padding: $pad $pad 0 $pad;
+
+		.winner-image{
+			position: absolute;
+			width: $img;
+		}
+
+		.intro{
+			min-height: $img;
+			padding: 0 0 0 ($img + $pad);
+			position: relative;
+
+			.btn.nav{
+				bottom: $pad;
+				position: absolute;
+				right: 0;
+			}
+		}
+	}
+
+	.footer{
+		color: white;
+		padding: ($pad / 2) ($pad / 2) 0 ($pad / 2);
+
+		.extra-profile-container{	
+			list-style: none;
+			margin: 0;
+			padding: 0;
+
+			.profile-image{
+				display: inline-block;
+				padding: $pad ($pad / 2) 0 ($pad / 2);
+				position: relative;
+
+				.icon{
+					display: block;
+					background: {
+						image: url(../img/transparent-sprite.png);
+						repeat: no-repeat;
+					}
+					height: 100px;
+					// left: -45px; // mouseenter state
+					left: -65px;
+					position: absolute;
+					// top: -45px; // mouseenter state
+					top: -65px;
+					width: 100px;
+					@include box-shadow(0 0 $pad 0 rgba(0, 0, 0, 0));
+					@include opacity(0);
+				}
+				
+				img{
+					width: 184px;
+				}
+			}
+		}
+	}
+}
+
+.container-shadow[data-type="userForm"]{
+
+	.main-heading{
+		padding: ($pad / 2) $pad ($pad / 2) ($pad * 2);
+
+		.icon{
+			background-position: -342px -140px;		
+		}
+	}
+
+	.main-content{
+		padding: $pad $pad $pad $pad;
+
+		.intro{
+
+		}
+
+		hr{
+			margin: $pad 0 $pad 0;
+		}
+
+		form{
+
+			li{
+				display: inline-block;
+			}
+
+			label{
+				padding: 0 0 ($pad / 2) 0;
+			}
+
+			label, input{
+				cursor: pointer;
+				display: block;
+				outline: none;
+			}
+
+			input{
+				color: white;
+				font: {
+					family: 'Roboto', sans-serif;
+					weight: 300;
+					style: normal;
+				}
+			}
+
+			.text-elements{
+				list-style: none;
+				margin: 0;
+				padding: 0;
+
+				li.text{
+					width: 388px;
+					//background: red;
+
+					&.padding{
+						padding: 0 $pad 0 0;
+						width: 388px + $pad;
+					}
+
+					&[data-validate="false"]{
+
+						label{
+							color: $red;
+						}
+
+						input{
+							background-color: $red;
+							border: 1px solid $red;
+							color: white;
+						}
+					}
+
+					&[data-state="over"]{
+
+						label{
+							color: $blueD;
+						}
+
+						input{
+							background-color: $blueD;
+							border: 1px solid $blueD;
+							color: white;
+						}
+					}
+
+					&[data-state="focus"]{
+
+						label{
+							color: $blue;
+						}
+
+						input{
+							background-color: $blue;
+							border: 1px solid $blue;
+							color: white;
+						}
+					}
+
+					input{
+						background-color: transparent;
+						border: 1px solid $blueD;
+						color: $blueD;
+						margin: 0 0 $pad 0;
+						padding: $pad / 2;
+						width: 100%;
+						@include border-radius($pad / 4);
+					}
+				}
+			}
+
+			hr{
+				margin: 0 0 $pad 0;
+			}
+
+			.check-elements, .condition-elements{
+				list-style: none;
+				margin: 0;
+				padding: ($pad / 2) 0 0 0;
+			
+
+				li{
+					display: inline-block;
+					width: 184px;
+					
+					&.padding{
+						margin: 0 $pad 0 0;
+					}
+				}
+
+				label{
+					border: 1px solid $blueD;
+					display: block;
+					font-size: 13px;
+					font-weight: 500;
+					padding: ($pad / 1.5) ($pad / 2);
+					margin: 0 0 $pad 0;
+					position: relative;
+					text-transform: uppercase;
+					@include border-radius($pad / 4);
+
+					&:hover{
+						background: $blueD !important;
+						border: 1px solid $blueD !important;
+						color: white;
+
+						&:before{
+							background: {
+								color: white;
+								position: -21px -581px;
+							}
+							border: 1px solid $blueD !important;
+						}
+					}
+
+					&:before{
+						$wth: 20px;
+						@include pseudo;
+						background: {
+							color: transparent;
+							image: url(../img/transparent-sprite.png);
+							position: 0 -581px;
+							repeat: no-repeat;
+						}
+						border: 1px solid $blueD;
+						height: $wth;
+						margin: (- $wth / 2) 0 0 0;
+						right: 10px;
+						top: 50%;
+						width: $wth;
+						@include border-radius($pad / 6);
+					}
+				}
+
+				input{
+					//display: none;
+					left: -99999px;
+					position: absolute;
+
+					&:checked ~ label{
+						background: $blue !important;
+						border: 1px solid $blue !important;
+						color: white;
+
+						&:before{
+							background: {
+								color: white;
+								position: -61px -581px;
+							}
+							border: 1px solid $blue !important;
+						}
+					}
+				}
+			}
+
+			.condition-elements{
+				padding: 0;
+
+				li{
+					display: block;
+					margin: 0 0 $pad 0;
+					width: 388px;
+
+					&[data-validate="false"] label{
+						background: $red;
+						border: 1px solid $red;
+						color: white;
+
+						&:before{
+							background-color: white;
+							border: 1px solid $red;
+						}
+					}
+				}
+			}
+
+			.button-container{
+				list-style: none;
+				margin: 0;
+				padding: 0;
+
+				input.btn{
+					background-color: transparent;
+					border: 0;
+					margin: 0;
+					padding: 1px 0;
+				}
+
+				.btn.nav.skip{
+					margin: 0 0 0 $pad;
+
+					.icon{
+						display: none;
+					}
+				}
+			}
+		}
+	}
+
+	.footer{
+		color: white;
+		padding: ($pad / 2) ($pad / 2) 0 ($pad / 2);
+
+
+	}
+}
+
+.container-shadow[data-type="socialMedia"]{
+
+	.main-heading{
+		padding: ($pad / 2) $pad ($pad / 2) $pad;
+	}
+
+	.main-content{
+		padding: $pad $pad $pad $pad;
+
+		.intro{
+			padding: 0 0 $pad 0;	
+		}
+	}
+
+	.footer{
+
+		.social-message, .social-buttons{
+			float: left;
+		}
+
+		.social-message{
+			color: white;
+			padding: ($pad / 2) ($pad / 2) ($pad / 2) ($pad / 2);
+			width: 40%;
+
+			.icon{
+				background: {
+					color: red;
+					image: url(../img/transparent-sprite.png);
+					position: 0 0px;
+					repeat: repeat-x;
+				}
+				height: 100px;
+				left: -73px;
+				margin: -50px 0 0 0;
+				position: absolute;
+				top: 50%;
+				width: 112px;
+			}
+		}
+
+		.social-buttons{
+			list-style: none;
+			margin: 0;
+			padding: 0;
+			width: 60%;
+
+			.btn{
+				display: inline-block;
+				padding: ($pad / 2) ($pad / 2) 0 ($pad / 2);
+				width: 33.3%;
+
+				img{
+					width: 100%;
+				}
+			}
+		}
+
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
