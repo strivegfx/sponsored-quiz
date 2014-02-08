@@ -20,7 +20,7 @@ $(document).ready(function(){
 
 			questionWeight : [], // hold all of the weights gathered from each answered question to be sorted and presented at the restults stage
 
-			userSelection : null, // store the user badge selection to offer up the correct content at the end of the quiz
+			badgeSelection : null, // store the user badge selection to offer up the correct content at the end of the quiz
 
 			ani : 0.25, // the global speed that the all animations are referenced to
 
@@ -97,7 +97,7 @@ $(document).ready(function(){
 				$c = $mod.children('.container-shadow'); // redefine $c now that is has been re-inserted into the DOM
 
 				$m.g.transition.panIn($c); // transition the new HTML to view
-				$m[$t].listeners.on($c, $t); // generate the listeners for this new HTML structure
+				$m[$t].listeners.on($c, $t, $json); // generate the listeners for this new HTML structure
 
 			}, // end of init fnc
 
@@ -212,7 +212,7 @@ $(document).ready(function(){
 
 				} // end of for loop
 
-				$wth = 650 / $qLen;
+				$wth = 600 / $qLen;
 
 				for($i = 0; $i < $qLen; $i++){
 
@@ -226,15 +226,7 @@ $(document).ready(function(){
 
 				return $html;
 
-			}, // end of questionFooter fnc
-
-			userSelection : function($c){
-
-				$m.s.userSelection = $c.children('.main-content').attr('data-profile'); // get the current user selected badge and store it in the global settings obj
-
-				console.log('--> user selection = ' + $m.s.userSelection);
-
-			} // end of userSelection fnc
+			} // end of questionFooter fnc
 
 		}, // end of general obj
 
@@ -263,9 +255,13 @@ $(document).ready(function(){
 				init : function($json, $t, $ref){
 
 					return '<div class="container-shadow" data-ref="' + $ref + '" data-type="' + $t + '">' +
-							'<h2 class="main-heading">' + $json.heading + '</h2>' +
+							'<h2 class="main-heading">What kind of traveller are you?</h2>' +
 							'<div class="main-content">' +
-								'<div class="intro">' + $json.contents + '</div>' +
+								'<div class="intro">' +
+									'<p>For the best experiences in Australia, we have created travel styles to suit who you are. You might be a Nature Seeker? Eco Indulger? Food Fanatic? Active Adventurer? Or maybe a Coastal Cruiser? Our fun quiz will help you find what kind of traveller you are and reveal the best Australian experiences to you.</p>' +
+									'<p>Take the quiz now to be in to win a $10,000 experience flying Qantas</p>' +
+									'<p>Check out this weeks Sunday Star Times for a promo code that gets you an additional entry into the competition!</p>' +
+								'</div>' +
 								'<div class="btn nav continue">' +
 									'<div class="icon"></div>' +
 									'Continue' +
@@ -604,7 +600,7 @@ $(document).ready(function(){
 					var $results = $m[$t].populate.results(); // parse the user results into a winner and loser object for insertion into the HTML
 
 					return '<div class="container-shadow" data-ref="' + $ref + '" data-type="' + $t + '">' +
-							'<h2 class="main-heading">' + $json.heading + ' ' + $json.profiles[$results.winner].kind + '</h2>' +
+							'<h2 class="main-heading">Congratulations you are ' + $json.profiles[$results.winner].indefiniteArticle + ' ' + $json.profiles[$results.winner].kind + '</h2>' +
 							'<div class="main-content" data-profile="' + $results.winner + '">' +
 								'<img class="winner-image" src="img/profile-badge-' + $results.winner + '.png">' +
 								'<div class="intro">' +
@@ -616,7 +612,10 @@ $(document).ready(function(){
 								'</div>' +
 							'</div>' +
 							'<div class="footer">' +
-								'<h3>' + $json.userPrompt + '</h3>' +
+								'<h3>' +
+									'<p>Not quite the traveller profile you thought you\'d be?</p>' +
+									'<p>Are you one of the following?</p>' +
+								'</h3>' +
 								$m[$t].populate.extraProfile($json, $results) + // create a list of the loser badges
 							'</div>' +
 						'</div>';
@@ -705,19 +704,19 @@ $(document).ready(function(){
 
 			listeners : {
 
-				on : function($c, $t){
+				on : function($c, $t, $json){
 
 					$c.children('.footer').find('.extra-profile-container')
 						.on('mouseenter.disposable', '.profile-image', function(){ $m[$t].actions.badge.mouseenter($(this)); })
 						.on('mouseleave.disposable', '.profile-image', function(){ $m[$t].actions.badge.mouseleave($(this)); })
-						.on('click.disposable', '.profile-image', function(){ $m[$t].actions.badge.onclick.init($(this), $c, $t); });
+						.on('click.disposable', '.profile-image', function(){ $m[$t].actions.badge.onclick.init($(this), $c, $t, $json); });
 
 					$c.find('.continue')
 						.on('mouseenter.disposable', function(){ $m.g.navBtn.mouseenter($(this)); }) // use the generic nav button action from the general obj
 						.on('mouseleave.disposable', function(){ $m.g.navBtn.mouseleave($(this)); }) // use the generic nav button action from the general obj
 						.on('click.disposable', function(){
 							$m.g.transition.panOut($c);
-							$m.g.userSelection($c); // get the current user selected badge and store it in the global settings obj
+							$m[$t].actions.badge.badgeSelection($c, $json); // get the current user selected badge and store it in the global settings obj
 						}); // transition out the results DOM elements...
 
 				}, // end of on fnc
@@ -780,18 +779,17 @@ $(document).ready(function(){
 
 					onclick : {
 
-						init : function($this, $c, $t){
+						init : function($this, $c, $t, $json){
 
 						console.log('$t = ' + $t);
 
-						var $ref = $c.attr('data-ref'),
-							$mc = $c.find('.main-content'),
+						var $mc = $c.find('.main-content'),
 							$oldWin = $mc.attr('data-profile'), // old winner reference
-							$newWin = $this.attr('data-profile'), // new winner reference
-							$json = $m.s.json[$ref]; // get the JSON results data
+							$newWin = $this.attr('data-profile'); // new winner reference
+							
 
 						// update the winner data...
-						$c.find('.main-heading').text($json.heading + ' ' + $json.profiles[$newWin].kind);
+						$c.find('.main-heading').text('Congratulations you are ' + $json.profiles[$newWin].indefiniteArticle + ' ' + $json.profiles[$newWin].kind);
 						$mc.attr({'data-profile' : $newWin});
 						$m[$t].actions.badge.onclick.scaleOut($mc.find('.winner-image'), $newWin, 'winner', $t);
 						$mc.find('.blurb').text($json.profiles[$newWin].blurb);
@@ -843,7 +841,14 @@ $(document).ready(function(){
 
 						} // end of scaleOut fnc
 
-					} // end of onclick fnc
+					}, // end of onclick fnc
+
+					badgeSelection : function($c, $json){
+
+						var $badgeNum = $c.children('.main-content').attr('data-profile'); // get the current user selected badge and store it in the global settings obj
+						$m.s.badgeSelection = $json.profiles[$badgeNum]; // store the chosen profile badge data in the global settings obj
+
+					} // end of badgeSelection fnc
 
 				} // end of badge obj
 
@@ -882,65 +887,66 @@ $(document).ready(function(){
 
 					return '<div class="container-shadow" data-ref="' + $ref + '" data-type="' + $t + '">' +
 							'<h2 class="main-heading">' +
-								'Enter your details below to be in to win a $10,000 Australian experience' +
+								'Competition Form' +
 								'<div class="icon"></div>' +
 								'</h2>' +
 							'<div class="main-content">' +
-								'<div class="btn nav prize">' +
+								'<h3 class="intro">Enter your details below to be in to win a $10,000 Australian experience.</h3>' +
+								'<a class="btn nav prize" href="www.stuff.co.nz/prize" target="_blank">' +
 									'<div class="icon"></div>' +
 									'View your prize' +
-								'</div>' +
+								'</a>' +
 								'<hr>' +
 								'<form>' +
-									'<ul class="text-elements">' +
-										'<li class="text padding" data-state="up" data-validate="true">' +
+									'<ul class="string-elements">' +
+										'<li class="padding">' +
+											'<input id="userName" type="text" name="userName" placeholder="First Last" required>' +
 											'<label for="userName">Name</label>' +
-											'<input id="userName" class="validate" type="text" name="userName" placeholder="First Last" required>' +
 										'</li><!--' +
-										'--><li class="text" data-state="up" data-validate="true">' +
+										'--><li>' +
+											'<input id="userPhone" type="tel" name="userPhone" placeholder="88-888-8888" required>' +
 											'<label for="userPhone">Daytime phone number</label>' +
-											'<input id="userPhone" class="validate" type="tel" name="userPhone" placeholder="88-888-8888" required>' +
 										'</li><!--' +
-										'--><li class="text padding" data-state="up" data-validate="true">' +
+										'--><li class="padding">' +
+											'<input id="userEmail" type="email" name="userEmail" placeholder="youremail@gmail.com" required>' +
 											'<label for="userEmail">Email</label>' +
-											'<input id="userEmail" class="validate" type="email" name="userEmail" placeholder="youremail@gmail.com" required>' +
 										'</li><!--' +
-										'--><li class="text" data-state="up">' +
-											'<label for="userSST">Sunday Star Times Promo Code</label>' +
-											'<input id="userSST" type="tel" name="userSST" placeholder="8888">' +
+										'--><li>' +
+											'<input id="userCode" type="text" name="userCode" placeholder="8888">' +
+											'<label for="userCode">Sunday Star Times Promo Code</label>' +
 										'</li>' +
 									'</ul>' +
 									'<hr>' +
 									'I would like to receive additional information from...' +
 									'<ul class="check-elements">' +
-										'<li class="check padding">' +
-											'<input id="tourismAustralia" type="checkbox" name="tourismAustralia">' +
+										'<li class="padding">' +
+											'<input id="tourismAustralia" type="checkbox" name="moreInfo[]" value="tourismAustralia">' +
 											'<label for="tourismAustralia">Tourism Australia</label>' +
 										'</li><!--' +
-										'--><li class="check padding">' +
-											'<input id="untitedTravel" type="checkbox" name="untitedTravel">' +
+										'--><li class="padding">' +
+											'<input id="untitedTravel" type="checkbox" name="moreInfo[]" value="untitedTravel">' +
 											'<label for="untitedTravel">United Travel</label>' +
 										'</li><!--' +
-										'--><li class="check padding">' +
-											'<input id="fairfaxMedia" type="checkbox" name="fairfaxMedia">' +
+										'--><li class="padding">' +
+											'<input id="fairfaxMedia" type="checkbox" name="moreInfo[]" value="fairfaxMedia">' +
 											'<label for="fairfaxMedia">Fairfax Media</label>' +
 										'</li><!--' +
-										'--><li class="check">' +
-											'<input id="qantas" type="checkbox" name="qantas">' +
+										'--><li>' +
+											'<input id="qantas" type="checkbox" name="moreInfo[]" value="qantas">' +
 											'<label for="qantas">Qantas Red E-mail</label>' +
 										'</li>' +
 									'</ul>' +
 									'<hr>' +
 									'<ul class="condition-elements">' +
-										'<li class="check" data-validate="true">' +
-											'<input id="conditions" class="validate" type="checkbox" name="conditions" required>' +
+										'<li class="check">' +
+											'<input id="conditions" type="checkbox" name="conditions" required>' +
 											'<label for="conditions">I accept the Terms &#38; Conditions</label>' +
 										'</li>' +
 									'</ul>' +
 									'<ul class="button-container">' +
 										'<li class="btn nav submit">' +
 											'<div class="icon"></div>' +
-											'<input class="btn" type="submit" value="Submit">' +
+											'Submit' +
 										'</li>' +
 										'<li class="btn nav skip">' +
 											'<div class="icon"></div>' +
@@ -960,36 +966,25 @@ $(document).ready(function(){
 
 				on : function($c, $t){
 
-					var $form = $c.children('.main-content').children('form'),
-						$te = $form.children('.text-elements');
+					var $form = $c.children('.main-content').children('form');
 
-					/*$te.find('.validate')
-						.on('focus.disposable', function(){ $m[$t].actions.validate.onfocus($(this)); })
-						.on('blur.disposable', function(){
-							var $this = $(this),
-								$kind = $this.attr('type');
+					$form.children('.string-elements').find('input')
+						.on('blur.disposable', function(){ $m[$t].actions.inputField.onblur($t, $(this)); });
 
-							$m[$t].actions.validate[$kind]($t, $this);
-						});*/
-
-					$te.find('input')
-						.on('mouseenter.disposable', function(){ $m[$t].actions.inputField.mouseenter($(this)); })
-						.on('mouseleave.disposable', function(){ $m[$t].actions.inputField.mouseleave($(this)); })
-						.on('focus.disposable', function(){ $m[$t].actions.inputField.onfocus($(this)); })
-						.on('blur.disposable', function(){  $m[$t].actions.inputField.onblur($t, $(this)); });
-
-					$form.children('.button-container')
-						.on('mouseenter.disposable', '.btn.nav', function(){
+					$c.find('.btn.nav')
+						.on('mouseenter.disposable', function(){
 							var $this = $(this);
-							if($this.hasClass('submit')){ $m.g.navBtn.mouseenter($(this)); }
+							if($this.hasClass('prize')){ $m.g.navBtn.mouseenter($this); }
+							if($this.hasClass('submit')){ $m.g.navBtn.mouseenter($this); }
 							if($this.hasClass('skip')){ $m[$t].actions.navBtn.skip.mouseenter($this); }
-						}).on('mouseleave.disposable', '.btn.nav', function(){
+						}).on('mouseleave.disposable', function(){
 							var $this = $(this);
-							if($this.hasClass('submit')){ $m.g.navBtn.mouseleave($(this)); }
+							if($this.hasClass('prize')){ $m.g.navBtn.mouseleave($this); }
+							if($this.hasClass('submit')){ $m.g.navBtn.mouseleave($this); }
 							if($this.hasClass('skip')){ $m[$t].actions.navBtn.skip.mouseleave($this); }
-						}).on('click.disposable', '.btn.nav', function(){
+						}).on('click.disposable', function(){
 							var $this = $(this);
-							if($this.hasClass('submit')){ $m[$t].actions.navBtn.submit.onclick($t, $form); }
+							if($this.hasClass('submit')){ $m[$t].actions.sendData($t, $c, $form); } // ajax the form data over to php to be validated and sent to SQL
 							if($this.hasClass('skip')){ $m.g.transition.panOut($c); }
 						});
 
@@ -999,8 +994,8 @@ $(document).ready(function(){
 
 					var $form = $c.children('.main-content').children('form');
 
-					$form.children('.text-elements').find('input').off('.disposable'); // remove event listeners from the input fields
-					$form.children('.button-container').children('.btn.nav').off('.disposable'); // remove event listeners from the submit and skip buttons
+					$form.children('.string-elements').find('input').off('.disposable'); // remove event listeners from the input fields
+					$form.find('.btn.nav').off('.disposable'); // remove event listeners from the submit and skip buttons
 
 				} // end of on fnc
 
@@ -1008,128 +1003,65 @@ $(document).ready(function(){
 
 			actions : {
 
+				sendData : function($t, $c, $form){
+
+					$.post('php/form-data.php', {'userData' : $form.serialize()}, function($error){
+
+						console.dir('returned php error = ' + $error);
+
+						if($error === 'none'){ $m.g.transition.panOut($c); }
+						else{ $m[$t].actions.validate.init($t, $form, $error); }
+
+					}); // end of post fnc
+
+				}, // end of sendData fnc
+
 				validate : {
 
-					checkPattern : function($this, $val, $pat){
+					init : function($t, $form, $error){
 
-						console.log('--> checking pattern...');
+						$error = $error.split(',');
 
-						if($pat.test($val)){
-							console.log('   ... pattern = match');
-							$this.parent().attr({'data-validate' : 'true'});
-							return 'true';
-						}else{
-							console.log('   ... pattern = miss-match');
-							$this.parent().attr({'data-validate' : 'false'});
-							return 'false';
-						} // end of if statement
+						var $len = $error.length,
+							$i;
 
-					}, // end of chackPattern fnc
+						console.log('length = ' + $len);
 
-					text : function($t, $this){
+						for($i = 0; $i < $len; $i++){
 
-						var $val = $this.val(),
-							$pat = /[a-z ]/gi;
+							console.log('error num ' + $i + ' error = ' + $error[$i]);
 
-						console.log('current text val = ' + $val);
+							$m[$t].actions.validate.change($form, $error[$i]);
 
-						return $m[$t].actions.validate.checkPattern($this, $val, $pat);
+						} // end of for loop
 
-					}, // end of text fnc
+					}, // end of init fnc
 
-					tel : function($t, $this){
+					change : function($form, $name){
 
-						var $val = $this.val(),
-							$pat = /[0-9- ]/gi;
+							var $this = $form.find($('input[name="' + $name + '"]'));
 
-						console.log('current tel val = ' + $val);
+							$this.attr({'data-completed' : 'false'});
+							$this.attr({'data-validate' : 'false'});
 
-						return $m[$t].actions.validate.checkPattern($this, $val, $pat);
-
-					}, // end of text fnc
-
-					email : function($t, $this){
-
-						var $val = $this.val(),
-							$pat = /[a-zA-Z0-9-]{1,}@([a-zA-Z\.])?[a-zA-Z]{1,}\.[a-zA-Z]{1,4}/gi;
-
-						console.log('current email val = ' + $val);
-
-						return $m[$t].actions.validate.checkPattern($this, $val, $pat);
-
-					}, // end of text fnc
-
-					checkbox : function($t, $this){
-
-						var $val = $this.prop('checked');
-
-						console.log('checking conditions...');
-
-						if($val){
-							console.log('   ... checked');
-							$this.parent().attr({'data-validate' : 'true'});
-							return 'true';
-						}else{
-							console.log('   ... not checked');
-							$this.parent().attr({'data-validate' : 'false'});
-							return 'false';
-						} // end of if statement
-
-					} // end of checkbox fnc
+					} // end of change fnc
 
 				}, // end of validate obj
 
 				inputField : {
 
-					mouseenter : function($this){
-
-						// console.log('running "onmouseenter" actions for inputText...');
-
-						var $li = $this.parent(),
-							$val = $this.val(),
-							$state = $li.attr('data-state');
-
-						if($val === '' && $state !== 'focus'){$li.attr({'data-state' : 'over'});}
-
-					},
-
-					mouseleave : function($this){
-
-						// console.log('running "onmouseleave" actions for inputText...');
-
-						var $li = $this.parent(),
-							$val = $this.val(),
-							$state = $li.attr('data-state');
-
-						if($val === '' && $state !== 'focus'){$li.attr({'data-state' : 'up'});}
-
-					},
-
-					onfocus : function($this){
-
-						// console.log('running "onfocus" actions for inputText...');
-
-						var $li = $this.parent();
-
-						$li.attr({'data-state' : 'focus'});
-
-					},
-
 					onblur : function($t, $this){
 
-						// console.log('running "onblur" actions for inputText...');
+						console.log('running "onblur" actions for inputText...');
 
-						var $li = $this.parent(),
-							$val = $this.val(),
-							$validate = 'true',
-							$kind;
+						var $val = $this.val(),
+							$completed;
 
-						if($this.hasClass('validate')){
-							$kind = $this.attr('type');
-							$validate = $m[$t].actions.validate[$kind]($t, $this);
-						} // end of if statement
+						// if there is 
+						if($val === ''){ $completed = 'false'; }
+						else{ $completed = 'true'; }
 
-						if($val === '' || $validate === 'false'){$li.attr({'data-state' : 'up'});}
+						$this.attr({'data-completed' : $completed});
 
 					} // end of onblur fnc
 
@@ -1137,39 +1069,42 @@ $(document).ready(function(){
 
 				navBtn : {
 
-					submit : {
-
-						onclick : function($t, $form){
-
-							var $validate = 'true',
-								$this, $kind;
-
-							$form.find('input.validate').each(function(){
-
-								$this = $(this);
-								$kind = $this.attr('type');
-
-								if($m[$t].actions.validate[$kind]($t, $this) === 'false'){ $validate = 'false'; }
-
-							});
-
-							console.log('validate submission = ' + $validate);
-
-						} // end of onclick
-
-					},
-
 					skip : {
 
 						mouseenter : function($this){
 
+							$m.g.navBtn.mouseenter($this); // run the regular nav button mouseenter animation
 
-						}, // end of mouseenter
+							// since the skip button is part of a button group we need to hide the icon for the first button (continue btn) and show the icon for this button
+							var $skipIcon = $this.children('.icon'),
+								$submitIcon = $this.siblings('.submit').children('.icon'),
+								$ani = $m.s.ani;
+
+							TweenMax.set($skipIcon, {'display' : 'block'});
+							TweenMax.to($skipIcon, $ani, {'opacity' : '1'});
+
+							TweenMax.to($submitIcon, $ani, {'opacity' : '0'});
+
+						}, // end of mouseenter fnc
 
 						mouseleave : function($this){
 
+							$m.g.navBtn.mouseleave($this); // run the regular nav button mouseleave animation
 
-						} // rnd of mouseleave
+							// since the skip button is part of a button group we need to hide the icon for the first button (continue btn) and show the icon for this button
+							var $skipIcon = $this.children('.icon'),
+								$submitIcon = $this.siblings('.submit').children('.icon'),
+								$ani = $m.s.ani;
+
+							TweenMax.to($skipIcon, $ani, {
+								'opacity' : '0',
+								'onComplete' : $m.g.state,
+								'onCompleteParams' : [$skipIcon, 'none'] // change the icons display to none after the tween has been completed
+							});
+
+							TweenMax.to($submitIcon, $ani, {'opacity' : '1'});
+
+						} // end of mouseenter fnc
 
 					} // end of skip obj
 
@@ -1178,34 +1113,6 @@ $(document).ready(function(){
 			} // end of actions obj
 
 		}, // end of userForm obj
-
-		other : {
-
-			init : function(){
-
-
-			}, // end of init fnc
-
-			listeners : {
-
-				on : function(){
-
-
-				}, // end of on fnc
-
-				off : function(){
-
-
-				} // end of on fnc
-
-			}, // end of listeners obj
-
-			actions : {
-
-
-			} // end of actions obj
-
-		}, // end of other obj
 
 
 
@@ -1229,21 +1136,37 @@ $(document).ready(function(){
 
 				init : function($json, $t, $ref){
 
-					var $footer = $m.g.questionFooter($ref); // fetch the object containing the HTML for both the visual and text footer sections
-
 					return '<div class="container-shadow" data-ref="' + $ref + '" data-type="' + $t + '">' +
-								'<h2 class="main-heading">' +
-									'<div class="icon"></div>' +
-									$json.heading +
-								'</h2>' +
-									$m.questionImage.populate.questions($json, $ref) + // generate the questions bansed on the content in the JSON file...
-								'<div class="footer progress">' +
-									'<ul class="visual">' +
-										$footer.qVisual + // input the visual HTML from the footer obj
-									'</ul>' +
-									'<p class="text h4">' + $footer.qText + '</p>' + // input the text HTML from the footer obj
+							'<h2 class="main-heading">Share and get an extra entry into the competition</h2>' +
+							'<div class="main-content">' +
+								'<div class="intro">' +
+								'Click on the social media icons below to get your friends and family involved and find out their traveller profile, plus by sharing you\'ll get an extra entry into the draw! The message below will be posted into your chosen social streams(s).' +
 								'</div>' +
-							'</div>';
+								'<a class="btn nav continue" href="' + $m.s.badgeSelection.url + '" target="_blank">' +
+									'<div class="icon"></div>' +
+									'Continue' +
+								'</a>' +
+							'</div>' +
+							'<div class="footer">' +
+								'<div class="social-message h3">' +
+									'I just took the Traveller Profile Quiz and am ' + $m.s.badgeSelection.indefiniteArticle + ' ' + $m.s.badgeSelection.kind + '. Take the quiz, discover your travel personality and be in to win a $10,000 holiday!' +
+								'</div>' +
+								'<ul class="social-buttons">' +
+									'<li class="btn" data-type="facebook">' +
+										'<div class="icon"></div>' +
+										'<img src="img/profile-badge-0.png">' +
+									'</li><!--' +
+									'--><li class="btn" data-type="twitter">' +
+										'<div class="icon"></div>' +
+										'<img src="img/profile-badge-1.png">' +
+									'</li><!--' +
+									'--><li class="btn" data-type="google">' +
+										'<div class="icon"></div>' +
+										'<img src="img/profile-badge-2.png">' +
+									'</li><!---->' +
+								'</ul>' +
+							'</div>' +
+						'</div>';
 
 				} // end of init fnc
 
@@ -1253,16 +1176,21 @@ $(document).ready(function(){
 
 				on : function($c, $t){
 
-					//$c.children('.main-content')
-						//.on('mouseenter.disposable', '.answer', function(){ $m[$t].actions.answer.mouseenter($(this)); })
-						//.on('mouseleave.disposable', '.answer', function(){ $m[$t].actions.answer.mouseleave($(this)); })
-						//.on('click.disposable', '.answer', function(){ $m[$t].actions.answer.onclick($(this), $c); });
+					$c.find('.continue')
+						.on('mouseenter.disposable', function(){ $m.g.navBtn.mouseenter($(this)); }) // use the generic nav button action from the general obj
+						.on('mouseleave.disposable', function(){ $m.g.navBtn.mouseleave($(this)); }); // use the generic nav button action from the general obj
+
+					$c.children('.footer').children('.social-buttons')
+						.on('mouseenter.disposable', 'li', function(){ $m[$t].actions.social.mouseenter($(this)); })
+						.on('mouseleave.disposable', 'li', function(){ $m[$t].actions.social.mouseleave($(this)); })
+						.on('click.disposable', 'li', function(){ $m[$t].actions.social.onclick($(this)); });
 
 				}, // end of on fnc
 
 				off : function($c){
 
-					//$c.children('.main-content').children('.answer').off('.disposable'); // remove event listeners from the answer buttons
+					$c.find('.continue').off('.disposable'); // remove event listeners from the continue button
+					$c.children('footer').children('social-buttons').off('.disposable'); // remove event listeners from the social buttons
 
 				} // end of on fnc
 
@@ -1270,19 +1198,11 @@ $(document).ready(function(){
 
 			actions : {
 
-				continueBtn : {
-
-					onclick : function(){
-
-						console.log('---> offer up specific content to user...');
-
-					} // end of onclick fnc
-
-				}, // end of continueBtn obj
-
-				socialBtn : {
+				social : {
 
 					mouseenter : function($this){
+
+						console.log('social enter...');
 
 						var $icon = $this.children('.icon'),
 							$sib = $this.siblings().not($this),
@@ -1306,6 +1226,8 @@ $(document).ready(function(){
 
 					mouseleave : function($this){
 
+						console.log('social leave...');
+
 						var $icon = $this.children('.icon'),
 							$sib = $this.siblings(),
 							$ani = $m.s.ani;
@@ -1326,9 +1248,7 @@ $(document).ready(function(){
 
 					onclick : function($this, $c){
 
-						$this.attr({'data-state' : 'active'});
-						$m.g.getWeight($this, $c); // get the weight array from JSON for the chosen answer
-						$m.g.transition.panOut($c); // transition this current module off stage to be replaced by the next JSON content
+						console.log('---> pull up selected social prompt and add click to the user database');
 
 					} // end of onclick fnc
 
@@ -1336,7 +1256,7 @@ $(document).ready(function(){
 
 			} // end of actions obj
 
-		}, // end of questionImage obj
+		} // end of socialMedia obj
 
 
 
@@ -1463,7 +1383,7 @@ $(document).ready(function(){
 
 						if($this.hasClass('nav')){
 							$m.actions.navBtn.onclick($this, $c);
-							$m.g.userSelection($c);
+							$m.g.badgeSelection($c);
 						}
 						if($this.hasClass('profile-image')){$m.actions.results.onclick($this, $c);}
 
@@ -1497,7 +1417,7 @@ $(document).ready(function(){
 
 					if($this.hasClass('nav')){
 						$m.actions.navBtn.onclick($this, $c);
-						$m.g.userSelection($c);
+						$m.g.badgeSelection($c);
 					}
 					if($this.hasClass('profile-image')){$m.actions.results.onclick($this, $c);}
 
@@ -1774,4 +1694,332 @@ $(document).ready(function(){
                 </div>
             </div>
 
+*/
+
+
+
+/*
+		userForm : {
+
+			populate : {
+
+				init : function($json, $t, $ref){
+
+					return '<div class="container-shadow" data-ref="' + $ref + '" data-type="' + $t + '">' +
+							'<h2 class="main-heading">' +
+								'Enter your details below to be in to win a $10,000 Australian experience' +
+								'<div class="icon"></div>' +
+								'</h2>' +
+							'<div class="main-content">' +
+								'<div class="btn nav prize">' +
+									'<div class="icon"></div>' +
+									'View your prize' +
+								'</div>' +
+								'<hr>' +
+								'<form>' +
+									'<ul class="text-elements">' +
+										'<li class="text padding" data-state="up" data-validate="true">' +
+											'<label for="userName">Name</label>' +
+											'<input id="userName" class="validate" type="text" name="userName" placeholder="First Last" required>' +
+										'</li><!--' +
+										'--><li class="text" data-state="up" data-validate="true">' +
+											'<label for="userPhone">Daytime phone number</label>' +
+											'<input id="userPhone" class="validate" type="tel" name="userPhone" placeholder="88-888-8888" required>' +
+										'</li><!--' +
+										'--><li class="text padding" data-state="up" data-validate="true">' +
+											'<label for="userEmail">Email</label>' +
+											'<input id="userEmail" class="validate" type="email" name="userEmail" placeholder="youremail@gmail.com" required>' +
+										'</li><!--' +
+										'--><li class="text" data-state="up">' +
+											'<label for="userSST">Sunday Star Times Promo Code</label>' +
+											'<input id="userSST" type="tel" name="userSST" placeholder="8888">' +
+										'</li>' +
+									'</ul>' +
+									'<hr>' +
+									'I would like to receive additional information from...' +
+									'<ul class="check-elements">' +
+										'<li class="check padding">' +
+											'<input id="tourismAustralia" type="checkbox" name="tourismAustralia">' +
+											'<label for="tourismAustralia">Tourism Australia</label>' +
+										'</li><!--' +
+										'--><li class="check padding">' +
+											'<input id="untitedTravel" type="checkbox" name="untitedTravel">' +
+											'<label for="untitedTravel">United Travel</label>' +
+										'</li><!--' +
+										'--><li class="check padding">' +
+											'<input id="fairfaxMedia" type="checkbox" name="fairfaxMedia">' +
+											'<label for="fairfaxMedia">Fairfax Media</label>' +
+										'</li><!--' +
+										'--><li class="check">' +
+											'<input id="qantas" type="checkbox" name="qantas">' +
+											'<label for="qantas">Qantas Red E-mail</label>' +
+										'</li>' +
+									'</ul>' +
+									'<hr>' +
+									'<ul class="condition-elements">' +
+										'<li class="check" data-validate="true">' +
+											'<input id="conditions" class="validate" type="checkbox" name="conditions" required>' +
+											'<label for="conditions">I accept the Terms &#38; Conditions</label>' +
+										'</li>' +
+									'</ul>' +
+									'<ul class="button-container">' +
+										'<li class="btn nav submit">' +
+											'<div class="icon"></div>' +
+											'<input class="btn" type="submit" value="Submit">' +
+										'</li>' +
+										'<li class="btn nav skip">' +
+											'<div class="icon"></div>' +
+											'Skip' +
+										'</li>' +
+									'</ul>' +
+								'</form>' +
+							'</div>' +
+							'<div class="footer"></div>' +
+						'</div>';
+
+				} // end of init fnc
+
+			}, // end of populate obj
+
+			listeners : {
+
+				on : function($c, $t){
+
+					var $form = $c.children('.main-content').children('form'),
+						$te = $form.children('.text-elements');
+
+					$te.find('input')
+						.on('mouseenter.disposable', function(){ $m[$t].actions.inputField.mouseenter($(this)); })
+						.on('mouseleave.disposable', function(){ $m[$t].actions.inputField.mouseleave($(this)); })
+						.on('focus.disposable', function(){ $m[$t].actions.inputField.onfocus($(this)); })
+						.on('blur.disposable', function(){  $m[$t].actions.inputField.onblur($t, $(this)); });
+
+					$form.children('.button-container')
+						.on('mouseenter.disposable', '.btn.nav', function(){
+							var $this = $(this);
+							if($this.hasClass('submit')){ $m.g.navBtn.mouseenter($(this)); }
+							if($this.hasClass('skip')){ $m[$t].actions.navBtn.skip.mouseenter($this); }
+						}).on('mouseleave.disposable', '.btn.nav', function(){
+							var $this = $(this);
+							if($this.hasClass('submit')){ $m.g.navBtn.mouseleave($(this)); }
+							if($this.hasClass('skip')){ $m[$t].actions.navBtn.skip.mouseleave($this); }
+						}).on('click.disposable', '.btn.nav', function(){
+							var $this = $(this);
+							if($this.hasClass('submit')){ $m[$t].actions.navBtn.submit.onclick($t, $form); }
+							if($this.hasClass('skip')){ $m.g.transition.panOut($c); }
+						});
+
+				}, // end of on fnc
+
+				off : function($c){
+
+					var $form = $c.children('.main-content').children('form');
+
+					$form.children('.text-elements').find('input').off('.disposable'); // remove event listeners from the input fields
+					$form.children('.button-container').children('.btn.nav').off('.disposable'); // remove event listeners from the submit and skip buttons
+
+				} // end of on fnc
+
+			}, // end of listeners obj
+
+			actions : {
+
+				validate : {
+
+					checkPattern : function($this, $val, $pat){
+
+						console.log('--> checking pattern...');
+
+						if($pat.test($val)){
+							console.log('   ... pattern = match');
+							$this.parent().attr({'data-validate' : 'true'});
+							return 'true';
+						}else{
+							console.log('   ... pattern = miss-match');
+							$this.parent().attr({'data-validate' : 'false'});
+							return 'false';
+						} // end of if statement
+
+					}, // end of chackPattern fnc
+
+					text : function($t, $this){
+
+						var $val = $this.val(),
+							$pat = /[a-z ]/gi;
+
+						console.log('current text val = ' + $val);
+
+						return $m[$t].actions.validate.checkPattern($this, $val, $pat);
+
+					}, // end of text fnc
+
+					tel : function($t, $this){
+
+						var $val = $this.val(),
+							$pat = /[0-9- ]/gi;
+
+						console.log('current tel val = ' + $val);
+
+						return $m[$t].actions.validate.checkPattern($this, $val, $pat);
+
+					}, // end of text fnc
+
+					email : function($t, $this){
+
+						var $val = $this.val(),
+							$pat = /[a-zA-Z0-9-]{1,}@([a-zA-Z\.])?[a-zA-Z]{1,}\.[a-zA-Z]{1,4}/gi;
+
+						console.log('current email val = ' + $val);
+
+						return $m[$t].actions.validate.checkPattern($this, $val, $pat);
+
+					}, // end of text fnc
+
+					checkbox : function($t, $this){
+
+						var $val = $this.prop('checked');
+
+						console.log('checking conditions...');
+
+						if($val){
+							console.log('   ... checked');
+							$this.parent().attr({'data-validate' : 'true'});
+							return 'true';
+						}else{
+							console.log('   ... not checked');
+							$this.parent().attr({'data-validate' : 'false'});
+							return 'false';
+						} // end of if statement
+
+					} // end of checkbox fnc
+
+				}, // end of validate obj
+
+				inputField : {
+
+					mouseenter : function($this){
+
+						// console.log('running "onmouseenter" actions for inputText...');
+
+						var $li = $this.parent(),
+							$val = $this.val(),
+							$state = $li.attr('data-state');
+
+						if($val === '' && $state !== 'focus'){$li.attr({'data-state' : 'over'});}
+
+					},
+
+					mouseleave : function($this){
+
+						// console.log('running "onmouseleave" actions for inputText...');
+
+						var $li = $this.parent(),
+							$val = $this.val(),
+							$state = $li.attr('data-state');
+
+						if($val === '' && $state !== 'focus'){$li.attr({'data-state' : 'up'});}
+
+					},
+
+					onfocus : function($this){
+
+						// console.log('running "onfocus" actions for inputText...');
+
+						var $li = $this.parent();
+
+						$li.attr({'data-state' : 'focus'});
+
+					},
+
+					onblur : function($t, $this){
+
+						// console.log('running "onblur" actions for inputText...');
+
+						var $li = $this.parent(),
+							$val = $this.val(),
+							$validate = 'true',
+							$kind;
+
+						if($this.hasClass('validate')){
+							$kind = $this.attr('type');
+							$validate = $m[$t].actions.validate[$kind]($t, $this);
+						} // end of if statement
+
+						if($val === '' || $validate === 'false'){$li.attr({'data-state' : 'up'});}
+
+					} // end of onblur fnc
+
+				}, // end of inputField obj
+
+				navBtn : {
+
+					submit : {
+
+						onclick : function($t, $form){
+
+							var $validate = 'true',
+								$this, $kind;
+
+							$form.find('input.validate').each(function(){
+
+								$this = $(this);
+								$kind = $this.attr('type');
+
+								if($m[$t].actions.validate[$kind]($t, $this) === 'false'){ $validate = 'false'; }
+
+							});
+
+							console.log('validate submission = ' + $validate);
+
+						} // end of onclick
+
+					},
+
+					skip : {
+
+						mouseenter : function($this){
+
+
+						}, // end of mouseenter
+
+						mouseleave : function($this){
+
+
+						} // rnd of mouseleave
+
+					} // end of skip obj
+
+				} // end of navBtn
+
+			} // end of actions obj
+
+		}, // end of userForm obj
+
+		other : {
+
+			init : function(){
+
+
+			}, // end of init fnc
+
+			listeners : {
+
+				on : function(){
+
+
+				}, // end of on fnc
+
+				off : function(){
+
+
+				} // end of on fnc
+
+			}, // end of listeners obj
+
+			actions : {
+
+
+			} // end of actions obj
+
+		}, // end of other obj
 */

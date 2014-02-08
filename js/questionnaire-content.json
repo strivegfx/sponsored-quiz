@@ -1,32 +1,30 @@
 [
 	{
-		"containerType" : "welcome",
-		"heading" : "What kind of traveller are you?",
-		"contents" : "For the best experiences in Australia, we have created travel styles to suit who you are. You might be a Nature Seeker? Eco Indulger? Food Fanatic? Active Adventurer? Or maybe a Coastal Cruiser? Our fun quiz will help you find what kind of traveller you are and reveal the best Australian experiences to you. /n Take the quiz now to be in to win a $10,000 experience flying Qantas /n Check out this weeks Sunday Star Times for a promo code that gets you an additional entry into the competition!"
+		"containerType" : "welcome"
 	},
 
 	{
 		"containerType" : "questionText",
-		"heading" : "This is question one title",
+		"heading" : "When planning a holiday my number one priority is...",
 		"contents" : [
 			{
-				"answer" : "This is the answer one",
+				"answer" : "To explore a new area",
 				"weight" : [0,1,2,3,4]
 			},
 			{
-				"answer" : "This is the answer two",
+				"answer" : "To get away from everything familiar and experience new things",
 				"weight" : [4,0,1,2,3]
 			},
 			{
-				"answer" : "This is the answer three",
+				"answer" : "To spoil myself with everything I can afford",
 				"weight" : [3,4,0,1,2]
 			},
 			{
-				"answer" : "This is the answer four",
+				"answer" : "To eat as many new foods as I can",
 				"weight" : [2,3,4,0,1]
 			},
 			{
-				"answer" : "This is the answer five",
+				"answer" : "Finding a beach to lie on",
 				"weight" : [1,2,3,4,0]
 			}
 		]
@@ -34,7 +32,7 @@
 
 	{
 		"containerType" : "questionImage",
-		"heading" : "This is question two title",
+		"heading" : "They say a picture speaks a thousand words, which of the 5 images says the most to you?",
 		"contents" : [
 			{
 				"answer" : "-temp-image-1.jpg",
@@ -61,32 +59,35 @@
 
 	{
 		"containerType" : "results",
-		"heading" : "Congratulations you are a",
-		"userPrompt" : "Change profiles",
 		"profiles" : [
 			{
+				"indefiniteArticle" : "an",
 				"kind" : "Active Adventurer",
-				"blurb" : "This is the Active Adventurer blurb",
+				"blurb" : "You're not satisfied until you feel your heart racing and experience that familiar chill of frantic fear course its way through your body. Your pituitary gland kicks into gear, endorphins flood through your veins and you sigh as the euphoric feeling is all encompassing. You'd strap on a parachute, jump off a cliff or climb into a kayak, anything to feel that once again!",
 				"url" : "www.stuff.co.nz/active-adventurer"
 			},
 			{
+				"indefiniteArticle" : "a",
 				"kind" : "Coastal Cruiser",
-				"blurb" : "This is the Coastal Cruiser blurb",
+				"blurb" : "The feel of the sand between your toes, the warm summer breeze blowing through your hair and the smell of sunscreen... it's like coming home. The term \"beach bum\" isn't offensive to you, it just reinforces your love of the ocean. If you had it your way you'd quit your office job and live by the coast anyway.",
 				"url" : "www.stuff.co.nz/coastal-cruiser"
 			},
 			{
+				"indefiniteArticle" : "an",
 				"kind" : "Eco Induldger",
-				"blurb" : "This is the Eco Induldger blurb",
+				"blurb" : "Experiencing the overwhelming urge to get away from the bustling city every chance you get is an intrinsic trait for every Eco-Indulger. You crave harmony, getting back to nature and the chance to just chill out. But not at the expense of your comfort, of course! Your destination of choice is ideally near the ocean, possibly in a rainforest or maybe in the Outback as long as there is a gourmet restaurant nearby and a spa doesn't hurt either!",
 				"url" : "www.stuff.co.nz/eco-induldger"
 			},
 			{
+				"indefiniteArticle" : "a",
 				"kind" : "Food Fanatic",
-				"blurb" : "This is the Food Fanatic blurb",
+				"blurb" : "As a Food Fanatic you appreciate the subtle nuances and tones that distinguish a wonderful wine from a good one. You know that exceptional food can be found at a road-side stall as well as a Michelin star restaurant. You're excited to embark on epicurean adventures and you're not afraid to sample new or ethnic delicacies.",
 				"url" : "www.stuff.co.nz/food-fanatic"
 			},
 			{
+				"indefiniteArticle" : "a",
 				"kind" : "Nature Lover",
-				"blurb" : "This is the Nature Lover blurb",
+				"blurb" : "Succumbing to the call of the wild, you regularly seek the comfort of nature. The sound of birds chirping and the rustle of the trees in autumn combine to cultivate a deep stillness and peace within you. You meditate, learn and grow from Mother Nature. You enjoy learning about exotic flora and fauna and can't wait to visit new wilderness retreats and explore scenic landscapes.",
 				"url" : "www.stuff.co.nz/nature-lover"
 			}
 		]
@@ -97,14 +98,10 @@
 	},
 
 	{
-		"containerType" : "social",
-		"heading" : "Share and get an extra entry into the competition",
-		"contents" : "Click on the social media icons below to get your friends and family involved and find out their traveller profile, plus by sharing you'll get an extra entry into the draw! The message below will be posted into your chosen social streams(s)."
+		"containerType" : "socialMedia"
 	},
 
 	{
-		"containerType" : "thankyou",
-		"heading" : "???",
-		"contents" : "XXX"
+		"containerType" : "thankyou"
 	}
 ]

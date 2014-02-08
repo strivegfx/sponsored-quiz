@@ -23,42 +23,7 @@
 
     <body>
 
-        <div class="module">
-
-            <div class="container-shadow" data-ref="5" data-type="socialMedia">
-                <h2 class="main-heading">Share and get an extra entry into the competition</h2>
-                <div class="main-content">
-                    <div class="intro">
-                        Click on the social media icons below to get your friends and family involved and find out their traveller profile, plus by sharing you'll get an extra entry into the draw! The message below will be posted into your chosen social streams(s).
-                    </div>
-                    <div class="btn nav continue">
-                        <div class="icon"></div>
-                        Continue
-                    </div>
-                </div>
-                <div class="footer clear-fix">
-                    <div class="social-message h4">
-                        <div class="icon"></div>
-                        I just took the Traveller Profile Quiz and am an Eco Indulger. Take the quiz, discover your travel personality and be in to win a $10,000 holiday!
-                    </div>
-                    <ul class="social-buttons">
-                        <li class="btn" data-type="facebook">
-                            <div class="icon"></div>
-                            <img src="img/profile-badge-0.png">
-                        </li><!--
-                        --><li class="btn" data-type="twitter">
-                            <div class="icon"></div>
-                            <img src="img/profile-badge-1.png">
-                        </li><!--
-                        --><li class="btn" data-type="google">
-                            <div class="icon"></div>
-                            <img src="img/profile-badge-2.png">
-                        </li><!---->
-                    </ul>
-                </div>
-            </div>
-
-        </div>
+        <div class="module"></div>
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>

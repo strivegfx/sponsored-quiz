@@ -114,6 +114,10 @@ hr{
 	width: 100%;
 }
 
+p{
+	margin: 0 0 $pad 0;
+}
+
 .module{
 	background:{
 		image: url(../img/module-bg.jpg);
@@ -128,7 +132,7 @@ hr{
 	margin: 50px auto 0 auto;
 	padding: $pad * 2;
 	position: relative;
-	width: 920px;
+	width: 880px;
 	z-index: 0;
 	@include border-radius($pad);
 	@include box-shadow(0 0 $pad 0 rgba(black, 0.5));
@@ -206,7 +210,7 @@ hr{
 		margin: 0;
 		padding: 0;
 		position: relative;
-		width: 650px;
+		width: 600px;
 
 		li{
 			bottom: 0;
@@ -288,6 +292,7 @@ hr{
 	display: inline-block;
 	padding: ($pad / 1.5) ($pad * 1.5) ($pad / 1.5) ($pad * 1.5);
 	position: relative;
+	text-decoration: none;
 	@include border-radius($pad / 2);
 
 	&[data-state="over"]{
@@ -314,6 +319,23 @@ hr{
 	}
 }
 
+
+
+
+
+
+
+
+
+
+/*
+__      __     _                      
+\ \    / /___ | | __  ___  _ __   ___ 
+ \ \/\/ // -_)| |/ _|/ _ \| '  \ / -_)
+  \_/\_/ \___||_|\__|\___/|_|_|_|\___|
+                              
+*/
+
 .container-shadow[data-type="welcome"]{
 
 	.main-heading{
@@ -322,12 +344,25 @@ hr{
 
 	.main-content{
 		padding: $pad $pad $pad $pad;
-
-		.intro{
-			padding: 0 0 $pad 0;	
-		}
 	}
 }
+
+
+
+
+
+
+
+
+
+
+/*
+  ___                  _    _              _____           _   
+ / _ \  _  _  ___  ___| |_ (_) ___  _ _   |_   _|___ __ __| |_ 
+| (_) || || |/ -_)(_-<|  _|| |/ _ \| ' \    | | / -_)\ \ /|  _|
+ \__\_\ \_,_|\___|/__/ \__||_|\___/|_||_|   |_| \___|/_\_\ \__|                                                               
+                              
+*/
 
 .container-shadow[data-type="questionText"]{
 
@@ -394,6 +429,22 @@ hr{
 }
 
 
+
+
+
+
+
+
+
+
+/*
+  ___                  _    _              ___                         
+ / _ \  _  _  ___  ___| |_ (_) ___  _ _   |_ _| _ __   __ _  __ _  ___ 
+| (_) || || |/ -_)(_-<|  _|| |/ _ \| ' \   | | | '  \ / _` |/ _` |/ -_)
+ \__\_\ \_,_|\___|/__/ \__||_|\___/|_||_| |___||_|_|_|\__,_|\__, |\___|
+                                                            |___/      
+*/
+
 .container-shadow[data-type="questionImage"]{
 
 	.main-heading{
@@ -413,7 +464,7 @@ hr{
 
 		li{
 			$hgt: 250px;
-			$wth: 143px;
+			$wth: 135px;
 			background: {
 				image: url(../img/-temp-image-1.jpg); // temp!
 				position: 0 0;
@@ -480,6 +531,23 @@ hr{
 	}
 }
 
+
+
+
+
+
+
+
+
+
+/*
+ ___                 _  _       
+| _ \ ___  ___ _  _ | || |_  ___
+|   // -_)(_-<| || || ||  _|(_-<
+|_|_\\___|/__/ \_,_||_| \__|/__/
+                            
+*/
+
 .container-shadow[data-type="results"]{
 
 	.main-heading{
@@ -500,6 +568,11 @@ hr{
 			padding: 0 0 0 ($img + $pad);
 			position: relative;
 
+			.blurb{
+				display: inline-block;
+				padding: 0 0 ($pad * 6) 0; // to clear the absolute position continue button
+			}
+
 			.btn.nav{
 				bottom: $pad;
 				position: absolute;
@@ -512,6 +585,10 @@ hr{
 		color: white;
 		padding: ($pad / 2) ($pad / 2) 0 ($pad / 2);
 
+		h3{
+			padding: ($pad / 2) ($pad / 2) 0 ($pad / 2);
+		}
+
 		.extra-profile-container{	
 			list-style: none;
 			margin: 0;
@@ -519,7 +596,7 @@ hr{
 
 			.profile-image{
 				display: inline-block;
-				padding: $pad ($pad / 2) 0 ($pad / 2);
+				padding: 0 ($pad / 2) 0 ($pad / 2);
 				position: relative;
 
 				.icon{
@@ -540,12 +617,29 @@ hr{
 				}
 				
 				img{
-					width: 184px;
+					width: 174px;
 				}
 			}
 		}
 	}
 }
+
+
+
+
+
+
+
+
+
+
+/*
+ _   _                 ___                 
+| | | | ___ ___  _ _  | __|___  _ _  _ __  
+| |_| |(_-</ -_)| '_| | _|/ _ \| '_|| '  \ 
+ \___/ /__/\___||_|   |_| \___/|_|  |_|_|_|
+                            
+*/
 
 .container-shadow[data-type="userForm"]{
 
@@ -561,7 +655,7 @@ hr{
 		padding: $pad $pad $pad $pad;
 
 		.intro{
-
+			padding: 0 0 $pad 0;
 		}
 
 		hr{
@@ -569,6 +663,7 @@ hr{
 		}
 
 		form{
+			$halfWth: 368px;
 
 			li{
 				display: inline-block;
@@ -593,67 +688,64 @@ hr{
 				}
 			}
 
-			.text-elements{
+			.string-elements{
 				list-style: none;
 				margin: 0;
 				padding: 0;
 
-				li.text{
-					width: 388px;
-					//background: red;
+				li{
+					position: relative;
+					width: $halfWth;
 
 					&.padding{
 						padding: 0 $pad 0 0;
-						width: 388px + $pad;
+						width: $halfWth + $pad;
 					}
 
-					&[data-validate="false"]{
-
-						label{
-							color: $red;
-						}
-
-						input{
-							background-color: $red;
-							border: 1px solid $red;
-							color: white;
-						}
-					}
-
-					&[data-state="over"]{
-
-						label{
-							color: $blueD;
-						}
-
-						input{
-							background-color: $blueD;
-							border: 1px solid $blueD;
-							color: white;
-						}
-					}
-
-					&[data-state="focus"]{
-
-						label{
-							color: $blue;
-						}
-
-						input{
-							background-color: $blue;
-							border: 1px solid $blue;
-							color: white;
-						}
+					label{
+						left: 0;
+						position: absolute;
+						top: 0;
 					}
 
 					input{
 						background-color: transparent;
 						border: 1px solid $blueD;
 						color: $blueD;
-						margin: 0 0 $pad 0;
+						margin: ($pad * 2) 0 $pad 0;
 						padding: $pad / 2;
 						width: 100%;
 						@include border-radius($pad / 4);
+
+						&[data-validate="false"]{
+							background-color: $red;
+							border: 1px solid $red;
+							color: white;
+
+							& ~ label{
+								color: $red;
+							}
+						}
+
+						&:hover{
+							background-color: $blueD;
+							border: 1px solid $blueD;
+							color: white;
+
+							& ~ label{
+								color: $blueD;
+							}
+						}
+
+						&:focus, &[data-completed="true"]{
+							background-color: $blue !important;
+							border: 1px solid $blue !important;
+							color: white !important;
+
+							& ~ label{
+								color: $blue !important;
+							}
+						}
 					}
 				}
 			}
@@ -670,7 +762,7 @@ hr{
 
 				li{
 					display: inline-block;
-					width: 184px;
+					width: 174px;
 					
 					&.padding{
 						margin: 0 $pad 0 0;
@@ -748,9 +840,9 @@ hr{
 				li{
 					display: block;
 					margin: 0 0 $pad 0;
-					width: 388px;
+					width: $halfWth;
 
-					&[data-validate="false"] label{
+					input[data-validate="false"] ~ label{
 						background: $red;
 						border: 1px solid $red;
 						color: white;
@@ -794,6 +886,23 @@ hr{
 	}
 }
 
+
+
+
+
+
+
+
+
+
+/*
+ ___           _        _   __  __          _  _       
+/ __| ___  __ (_) __ _ | | |  \/  | ___  __| |(_) __ _ 
+\__ \/ _ \/ _|| |/ _` || | | |\/| |/ -_)/ _` || |/ _` |
+|___/\___/\__||_|\__,_||_| |_|  |_|\___|\__,_||_|\__,_|
+
+*/
+
 .container-shadow[data-type="socialMedia"]{
 
 	.main-heading{
@@ -810,48 +919,62 @@ hr{
 
 	.footer{
 
-		.social-message, .social-buttons{
-			float: left;
-		}
-
 		.social-message{
 			color: white;
-			padding: ($pad / 2) ($pad / 2) ($pad / 2) ($pad / 2);
-			width: 40%;
+			padding: ($pad / 2) ($pad * 2) ($pad / 2) ($pad / 2);
+			position: relative;
+		}
 
-			.icon{
-				background: {
-					color: red;
-					image: url(../img/transparent-sprite.png);
-					position: 0 0px;
-					repeat: repeat-x;
-				}
-				height: 100px;
-				left: -73px;
-				margin: -50px 0 0 0;
-				position: absolute;
-				top: 50%;
-				width: 112px;
-			}
+		hr{
+			margin: ($pad / 2) 0 ($pad / 2) 0;
+			@include opacity(0.5);
 		}
 
 		.social-buttons{
+			display: inline-block;
 			list-style: none;
 			margin: 0;
 			padding: 0;
-			width: 60%;
 
 			.btn{
 				display: inline-block;
 				padding: ($pad / 2) ($pad / 2) 0 ($pad / 2);
-				width: 33.3%;
+				position: relative;
 
+				&[data-type="facebook"] .icon{
+					background-position: 0 -610px;
+				}
+
+				&[data-type="twitter"] .icon{
+					background-position: -100px -610px;
+				}
+
+				&[data-type="google"] .icon{
+					background-position: -200px -610px;
+				}
+
+				.icon{
+					display: block;
+					background: {
+						image: url(../img/transparent-sprite.png);
+						repeat: no-repeat;
+					}
+					height: 100px;
+					// left: -45px; // mouseenter state
+					left: -65px;
+					position: absolute;
+					// top: -45px; // mouseenter state
+					top: -65px;
+					width: 100px;
+					@include box-shadow(0 0 $pad 0 rgba(0, 0, 0, 0));
+					@include opacity(0);
+				}
+				
 				img{
-					width: 100%;
+					width: 174px;
 				}
 			}
 		}
-
 	}
 }
 
