@@ -462,9 +462,47 @@ __      __     _
 		position: relative;
 		z-index: 0;
 
+		// set up image widths based on amount of questions in the list...
+
+		&[data-length="2"] li{
+			$wth: 368px;
+			width: $wth;
+
+			&:before{
+				width: $wth + $pad;
+			}
+		} // end of length = 2
+
+		&[data-length="3"] li{
+			$wth: 238px;
+			width: $wth;
+
+			&:before{
+				width: $wth + $pad;
+			}
+		} // end of length = 2
+
+		&[data-length="4"] li{
+			$wth: 174px;
+			width: $wth;
+
+			&:before{
+				width: $wth + $pad;
+			}
+		} // end of length = 2
+
+		&[data-length="5"] li{
+			$wth: 135px;
+			width: $wth;
+
+			&:before{
+				width: $wth + $pad;
+			}
+		} // end of length = 2
+
 		li{
 			$hgt: 250px;
-			$wth: 135px;
+			//$wth: 135px;
 			background: {
 				image: url(../img/-temp-image-1.jpg); // temp!
 				position: 0 0;
@@ -475,7 +513,7 @@ __      __     _
 			height: $hgt;
 			margin: ($pad * 2) 0 ($pad * 2) $pad;
 			position: relative;
-			width: $wth;
+			//width: $wth;
 			@include border-radius($pad / 2);
 			@include box-shadow(0 0 ($pad / 2) 0 rgba(black, 0.15));
 
@@ -488,7 +526,7 @@ __      __     _
 				height: $hgt + $pad;
 				left: (- $pad - ($thick * 2)) / 2;
 				top: (- $pad - ($thick * 2)) / 2;
-				width: $wth + $pad;
+				//width: $wth + $pad;
 				z-index: -1 !important;
 				@include border-radius($pad);
 				@include box-shadow(0 0 $pad 0 rgba(black, 0.5));
@@ -568,8 +606,9 @@ __      __     _
 			padding: 0 0 0 ($img + $pad);
 			position: relative;
 
-			.blurb{
+			.blurb{	
 				display: inline-block;
+				height: 350px; // based on the largest amount of profile information (stopps the abrupt height changing of the module when the content is swapped out)
 				padding: 0 0 ($pad * 6) 0; // to clear the absolute position continue button
 			}
 
@@ -686,6 +725,10 @@ __      __     _
 					weight: 300;
 					style: normal;
 				}
+			}
+
+			.hidden-elements{
+				display: none;
 			}
 
 			.string-elements{
@@ -919,6 +962,10 @@ __      __     _
 
 	.footer{
 
+		&[data-alert="true"]{
+			@include border-radius(0);
+		}
+
 		.social-message{
 			color: white;
 			padding: ($pad / 2) ($pad * 2) ($pad / 2) ($pad / 2);
@@ -931,49 +978,121 @@ __      __     _
 		}
 
 		.social-buttons{
+			cursor: pointer;
 			display: inline-block;
 			list-style: none;
-			margin: 0;
+			height: 80px; // increasing height to account for social button scale increase
+			margin: 0 0 0 2px; // 2px = push out border
 			padding: 0;
+			width: 100%;
 
-			.btn{
+			li{
+				$wth: 164px;
+				$pos: 160px;
 				display: inline-block;
-				padding: ($pad / 2) ($pad / 2) 0 ($pad / 2);
+				margin: 0 ($pad) 0 0;
 				position: relative;
+				width: $wth;
 
-				&[data-type="facebook"] .icon{
-					background-position: 0 -610px;
+				&[data-type="facebook"] .social-border{
+					padding: 11px 52px;
+
+					.icon{
+						background-position: ($pos * -1) -620px;
+					}
 				}
 
-				&[data-type="twitter"] .icon{
-					background-position: -100px -610px;
+				&[data-type="twitter"] .social-border{
+					padding: 13px 50px;
+
+					.icon{
+						background-position: ($pos * -2) -620px;
+					}
 				}
 
-				&[data-type="google"] .icon{
-					background-position: -200px -610px;
+				&[data-type="googlePlus"] .social-border{
+					padding: 15px 55px;
+
+					.icon{
+						background-position: ($pos * -3) -620px;
+					}
 				}
 
-				.icon{
-					display: block;
+				.social-border{
 					background: {
 						image: url(../img/transparent-sprite.png);
+						position: ($pos * 0) -620px;
 						repeat: no-repeat;
 					}
-					height: 100px;
-					// left: -45px; // mouseenter state
-					left: -65px;
+					border: 2px solid white;
+					height: 50px;
+					left: 50%;
+					margin: 0 0 0 -75px;
 					position: absolute;
-					// top: -45px; // mouseenter state
-					top: -65px;
+					width: $wth;
+					@include border-radius(7px);
+
+					.icon{
+						background: {
+							image: url(../img/transparent-sprite.png);
+							//position: -170px -620px;
+							repeat: no-repeat;
+						}
+						height: 100%;
+						left: 0;
+						position: absolute;
+						top: 0;
+						width: 100%;
+						z-index: 99999; // beats out the facebook like button
+						@include border-radius(4px);
+					}
+				}
+
+				/*.fb-like, #twitter-widget-0, #___plusone_0{
+					//left: 50%;
+					//margin: -30px 0 0 -5px;
+					//position: absolute;
+					//top: 90%;
+					//@include transform(scale(1.5) translateX(0)); // (16% = 50 / 3) <-- 3 is the ammount the the icons are being scaled by
+				}
+
+				.fb-like{
+					margin: -4px 0 0 0; // facebook icon has some slight padding at the top of the iframe before the button image
+				}
+
+				.fb-share-button{
+					background-color: gray;
+					height: 70px;
 					width: 100px;
-					@include box-shadow(0 0 $pad 0 rgba(0, 0, 0, 0));
-					@include opacity(0);
-				}
-				
-				img{
-					width: 174px;
-				}
+				}*/
 			}
+		}
+	}
+
+	.alert{
+		background-color: $blueD;
+		color: white;
+		display: none; // change to block when alert is visible
+		height: 0;
+		overflow: hidden;
+		padding: 0; // change to $pad when alert is visible
+		position: relative;
+		@include border-radius(0 0 ($pad / 2) ($pad / 2));
+
+		.icon{
+			background: {
+				image: url(../img/transparent-sprite.png);
+				repeat: no-repeat;
+				position: -230px -40px;
+			}
+			display: none; // change to block when icon is visible
+			height: 100px;
+			margin: -50px 0 0 0;
+			position: absolute;
+			right: -73px;
+			top: 50%;
+			width: 112px;
+			@include opacity(0); // change to 1 when icon is visible
 		}
 	}
 }

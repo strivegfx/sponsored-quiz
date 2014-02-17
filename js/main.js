@@ -1,6 +1,5 @@
 /*jshint devel: true*/
 /*global TweenMax: true*/
-/*global Elastic: true*/
 
 $(document).ready(function(){
 
@@ -22,7 +21,11 @@ $(document).ready(function(){
 
 			badgeSelection : null, // store the user badge selection to offer up the correct content at the end of the quiz
 
+			social : [], // stores the social streams references that the used shared to
+
 			ani : 0.25, // the global speed that the all animations are referenced to
+
+			pad : '20px', // generic padding variable reference used in SASS
 
 			col : {
 				blue : '#00b4ff', // a reference to the main blue in the design
@@ -482,7 +485,7 @@ $(document).ready(function(){
 
 					for($i = 0; $i < $len; $i++){
 
-						$html += '<li class="btn answer" data-ref="2" data-state="up" style="background-image: url(img/module-' + $ref + '-answer-' + $i + '.jpg);">' + // set the image reference
+						$html += '<li class="btn answer" data-ref="' + $i + '" data-state="up" style="background-image: url(img/module-' + $ref + '-answer-' + $i + '.jpg);">' + // set the image reference
 									'<div class="icon"></div>' +
 								'</li><!---->';
 
@@ -898,6 +901,9 @@ $(document).ready(function(){
 								'</a>' +
 								'<hr>' +
 								'<form>' +
+									'<ul class="hidden-elements">' +
+										'<li><input type="hidden" name="userProfile" value="' + $m.s.badgeSelection.kind + '"></li>' +
+									'</ul>' +
 									'<ul class="string-elements">' +
 										'<li class="padding">' +
 											'<input id="userName" type="text" name="userName" placeholder="First Last" required>' +
@@ -1136,6 +1142,11 @@ $(document).ready(function(){
 
 				init : function($json, $t, $ref){
 
+					var $id = $m.s.badgeSelection.indefiniteArticle,
+						$kind = $m.s.badgeSelection.kind;
+
+					$m[$t].populate.ogTags($id, $kind); // add the OG tags to the head of the document
+
 					return '<div class="container-shadow" data-ref="' + $ref + '" data-type="' + $t + '">' +
 							'<h2 class="main-heading">Share and get an extra entry into the competition</h2>' +
 							'<div class="main-content">' +
@@ -1149,26 +1160,175 @@ $(document).ready(function(){
 							'</div>' +
 							'<div class="footer">' +
 								'<div class="social-message h3">' +
-									'I just took the Traveller Profile Quiz and am ' + $m.s.badgeSelection.indefiniteArticle + ' ' + $m.s.badgeSelection.kind + '. Take the quiz, discover your travel personality and be in to win a $10,000 holiday!' +
+									'I just took the Traveller Profile Quiz and am ' + $id + ' ' + $kind + '. Take the quiz, discover your travel personality and be in to win a $10,000 holiday!' +
 								'</div>' +
 								'<ul class="social-buttons">' +
-									'<li class="btn" data-type="facebook">' +
-										'<div class="icon"></div>' +
-										'<img src="img/profile-badge-0.png">' +
+									'<li data-type="facebook">' +
+										'<div class="social-border">' +
+											'<div class="icon"></div>' +
+											'<div class="fb-like" data-href="http://www.strivegfx.com/fairfax/sponsored-quiz/" data-layout="button" data-action="like" data-show-faces="false" data-share="false"></div>' +
+										'</div>' +
+										//'<img class="fb-share-button" src="" onclick="fbShareClick()">' +
+										//'<div class="fb-share-button" data-href="http://www.strivegfx.com/fairfax/sponsored-quiz/" data-type="button" onclick="fbShareClick()"></div>' +
+										//'<div class="icon"></div>' +
+										//'<img src="img/profile-badge-0.png">' +
 									'</li><!--' +
-									'--><li class="btn" data-type="twitter">' +
-										'<div class="icon"></div>' +
-										'<img src="img/profile-badge-1.png">' +
+									'--><li data-type="twitter">' +
+										'<div class="social-border">' +
+											'<div class="icon"></div>' +
+											'<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.strivegfx.com/fairfax/sponsored-quiz" data-text="Try the sponsored quiz and WIN!" data-via="NZStuff" data-count="none">Tweet</a>' +
+										'</div>' +
+										//'<div class="icon"></div>' +
+										//'<img src="img/profile-badge-1.png">' +
 									'</li><!--' +
-									'--><li class="btn" data-type="google">' +
-										'<div class="icon"></div>' +
-										'<img src="img/profile-badge-2.png">' +
+									'--><li data-type="googlePlus">' +
+										'<div class="social-border">' +
+											'<div class="icon"></div>' +
+											'<div class="g-plusone" data-size="tall" data-annotation="none" data-callback="googlePlusCallback"></div>' +
+										'</div>' +
+										//'<div class="icon"></div>' +
+										//'<img src="img/profile-badge-2.png">' +
 									'</li><!---->' +
 								'</ul>' +
 							'</div>' +
-						'</div>';
+							'<div class="alert h3">' +
+								'<div class="icon"></div>' +
+								'You may need to enable popup’s for this page if you are having trouble accessing your social streams' +
+							'</div>' +
+						'</div>' +
+						// add social scripts from vendors sites before the closing body tag...
+						$m[$t].populate.facebook() +
+						$m[$t].populate.twitter() +
+						$m[$t].populate.googlePlus();
 
-				} // end of init fnc
+				}, // end of init fnc
+
+				ogTags : function($id, $kind){
+
+					// NOTE: do not mess with the space at the end of the tag i.e. " />" this can effect some browsers...
+
+					var $html = '<meta property="og:title" content="I just took the Traveller Profile Quiz and am ' + $id + ' ' + $kind + '." />' +
+								'<meta property="og:type" content="website" />' +
+								'<meta property="og:image" content="http://strivegfx.com/web_trial/social-share-btns/img/social-icon.png" />' +
+								'<meta property="og:image:type" content="image/png">' +
+								'<meta property="og:image:width" content="500">' +
+								'<meta property="og:image:height" content="500">' +
+								'<meta property="og:url" content="http://www.strivegfx.com/fairfax/sponsored-quiz/?from=social" />' +
+								'<meta property="og:description" content="Take the quiz, discover your travel personality and be in to win a $10,000 holiday!" />';
+
+					$('head').prepend($html);
+
+				}, // end of ogTags fnc
+
+				facebook : function(){
+
+					return '<div id="fb-root"></div>' +
+							'<script>' +
+								'window.fbAsyncInit = function() {' +
+									'FB.init({' +
+										'appId : 1449665505263212,' +
+										'status : true,' +
+										'xfbml : true' +
+									'});' +
+									'FB.Event.subscribe("edge.create", function(response) {' +
+										'console.log("facebook post");' +
+										'$("li[data-type=\'facebook\']").attr({"data-post" : "true"})' +
+									'});' +
+								'};' +
+								// facebook SDK
+								'(function(d, s, id) {' +
+									'var js, fjs = d.getElementsByTagName(s)[0];' +
+									'if (d.getElementById(id)) return;' +
+									'js = d.createElement(s); js.id = id;' +
+									'js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=1449665505263212";' +
+									'fjs.parentNode.insertBefore(js, fjs);' +
+								'}(document, "script", "facebook-jssdk"));' +
+							'</script>';
+
+								/*'<script>' +
+									'function fbShareClick(){' +
+										'console.log("facebook clicked!!!!");' +
+										'window.fbAsyncInit = function() {' +
+											'FB.init({' +
+												'appId : 1449665505263212,' +
+												'status : true,' +
+												'xfbml : true' +
+											'});' +
+											'FB.ui({' +
+													'method: "feed",' +
+													'name: "Sponsored Quiz.",' +
+													'caption: "A caption for the sponsored quiz =)",' +
+													'description: ("This is the sponsored quiz description!"),' + // place description in brackets
+													'link: "http://www.strivegfx.com/fairfax/sponsored-quiz/",' +
+													'picture: "http://www.fbrell.com/public/f8.jpg"' +
+												'},function(response) {' +
+													'if (response && response.post_id) {' +
+														'console.log("facebook post");' +
+														'$("li.facebook").attr({"data-post" : "true"});' +
+													'}' +
+												'}' +
+											');' +
+										'};' +
+										// facebook SDK
+
+										'(function(d, s, id){' +
+											'var js, fjs = d.getElementsByTagName(s)[0];' +
+											'if (d.getElementById(id)) {return;}' +
+											'js = d.createElement(s); js.id = id;' +
+											'js.src = "//connect.facebook.net/en_US/all.js";' +
+											'fjs.parentNode.insertBefore(js, fjs);' +
+										'}(document, "script", "facebook-jssdk"));' +
+									'}' + // end of fbShareClick fnc
+								'</script>';*/
+
+				}, // end of facebook fnc
+
+				twitter : function(){
+
+					return '<script>' +
+								// First, load the widgets.js file asynchronously
+								'window.twttr = (function (d,s,id) {' +
+									'var t, js, fjs = d.getElementsByTagName(s)[0];' +
+									'if (d.getElementById(id)) return; js=d.createElement(s); js.id=id;' +
+									'js.src="https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs);' +
+									'return window.twttr || (t = { _e: [], ready: function(f){ t._e.push(f) } });' +
+								'}(document, "script", "twitter-wjs"));' +
+								// Define our custom event handlers
+								'function tweetIntentToAnalytics (intentEvent) {' +
+									'if (!intentEvent) return;' +
+									'console.log("twitter post");' +
+									'$("li[data-type=\'twitter\']").attr({"data-post" : "true"})' +
+									//'var label = "tweet";' +
+									//'pageTracker._trackEvent(\'twitter_web_intents\', intentEvent.type, label);' +
+								'}' +
+								// Wait for the asynchronous resources to load
+								'twttr.ready(function (twttr) {' +
+									// Now bind our custom intent events
+									//'twttr.events.bind("click", clickEventToAnalytics);' +
+									'twttr.events.bind("tweet", tweetIntentToAnalytics);' +
+									//'twttr.events.bind("retweet", retweetIntentToAnalytics);' +
+									//'twttr.events.bind("favorite", favIntentToAnalytics);' +
+									//'twttr.events.bind("follow", followIntentToAnalytics);' +
+								'});' +
+							'</script>';
+
+				}, // end of facebook fnc
+
+				googlePlus : function(){
+
+					return '<script>' +
+								'(function() {' +
+									'var po = document.createElement("script"); po.type = "text/javascript"; po.async = true;' +
+									'po.src = "https://apis.google.com/js/platform.js";' +
+									'var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(po, s);' +
+								'})();' +
+								'function googlePlusCallback(){' +
+									'console.log("google+ post");' +
+									'$("li[data-type=\'googlePlus\']").attr({"data-post" : "true"})' +
+								'}' +
+							'</script>';
+
+				} // end of facebook fnc
 
 			}, // end of populate obj
 
@@ -1179,18 +1339,32 @@ $(document).ready(function(){
 					$c.find('.continue')
 						.on('mouseenter.disposable', function(){ $m.g.navBtn.mouseenter($(this)); }) // use the generic nav button action from the general obj
 						.on('mouseleave.disposable', function(){ $m.g.navBtn.mouseleave($(this)); }); // use the generic nav button action from the general obj
+						// no click as the href is hard coded into the button during the population function
 
 					$c.children('.footer').children('.social-buttons')
-						.on('mouseenter.disposable', 'li', function(){ $m[$t].actions.social.mouseenter($(this)); })
-						.on('mouseleave.disposable', 'li', function(){ $m[$t].actions.social.mouseleave($(this)); })
-						.on('click.disposable', 'li', function(){ $m[$t].actions.social.onclick($(this)); });
+						.on('mouseenter.alert', function(){ $m[$t].actions.showAlert($c, $(this)); });
+
+					$c.children('.footer').children('.social-buttons')
+						.on('mouseenter.disposable', 'li', function(){ $m[$t].actions.social.mouseenter($(this)); }) // use the generic nav button action from the general obj
+						.on('mouseleave.disposable', 'li', function(){ $m[$t].actions.social.mouseleave($(this)); }); // use the generic nav button action from the general obj
+
+					/*$c.children('.footer').children('.social-buttons').find('.fb-share-button')
+						.on('click.disposable', function(){ $m[$t].actions.showAlert($c); });
+
+					$c.children('.footer').children('.social-buttons').find('#twitter-widget-0')
+						.on('click.disposable', function(){ $m[$t].actions.showAlert($c); });
+
+					$c.children('.footer').children('.social-buttons').find('#___plusone_0')
+						.on('click.disposable', function(){ $m[$t].actions.showAlert($c); });*/
 
 				}, // end of on fnc
 
 				off : function($c){
 
 					$c.find('.continue').off('.disposable'); // remove event listeners from the continue button
-					$c.children('footer').children('social-buttons').off('.disposable'); // remove event listeners from the social buttons
+					$c.children('footer').children('social-buttons')
+						.off('.disposable') // remove event listeners from the social buttons
+						.off('.alert'); // turn off alert event listener
 
 				} // end of on fnc
 
@@ -1198,59 +1372,66 @@ $(document).ready(function(){
 
 			actions : {
 
+				showAlert : function($c, $this){
+
+					console.log('--> show popup alert');
+
+					var $footer = $c.children('.footer'),
+						$alert = $c.children('.alert'),
+						$icon = $alert.children('.icon');
+
+					$footer.attr({'data-alert' : 'true'}); // changes the footer border-radius to 0 via CSS3 and CSSPIE
+
+					TweenMax.set($alert, {
+						'display' : 'block',
+						'overflow' : 'visible'
+					});
+					TweenMax.to($alert, $m.s.ani, {
+						'height' : '100%',
+						'padding' : $m.s.pad
+					});
+
+					TweenMax.set($icon, {'display' : 'block'});
+					TweenMax.to($icon, $m.s.ani, {'opacity' : '1'});
+
+					$this.off('.alert'); // turn off listener after alert is already shown
+
+				}, // end of showAlert
+
 				social : {
 
 					mouseenter : function($this){
 
-						console.log('social enter...');
-
-						var $icon = $this.children('.icon'),
+						var $icon = $this.find('.icon'),
 							$sib = $this.siblings().not($this),
 							$ani = $m.s.ani;
 
-						$this.attr({'data-state' : 'over'});
-						TweenMax.set($this, {'opacity' : '1'}); // set opacity to 100% via TweenMax to kill any current opacity tweens currently acting on this object (causing a weird error with the pseudo element)
-
-						TweenMax.set($icon, {'display' : 'block'}); // change display state before the animation begins
-						TweenMax.to($icon, $ani, {'opacity' : '1'}); // tween the opacity to 100% (this seperate tween is NOT set to loop)
-						TweenMax.to($icon, $ani * 3, { // set the continuous animation loop 
-							'left' : '-70px',
-							'top' : '-70px',
-							'yoyo' : true,
-							'repeat' : -1
+						TweenMax.to($icon, $ani, {
+							'boxShadow' : '0 25px 10px -10px rgba(0, 0, 0, 0.25)',
+							'top' : '-55px',
+							'transform' : 'scale(1.2)'
 						});
 
-						TweenMax.to($sib, $ani, {'opacity' : '0.5'}); // fade all other images that are not currently being interacted with
+						TweenMax.set($this, {'opacity' : '1'}); // set opacity to 100% via TweenMax to kill any current opacity tweens currently acting on this object (causing a weird error with the pseudo element)
+						TweenMax.to($sib, $ani, {'opacity' : '0.25'}); // fade all other images that are not currently being interacted with
 
 					}, // end of mouseenter fnc
 
 					mouseleave : function($this){
 
-						console.log('social leave...');
-
-						var $icon = $this.children('.icon'),
+						var $icon = $this.find('.icon'),
 							$sib = $this.siblings(),
 							$ani = $m.s.ani;
 
-						$this.attr({'data-state' : 'up'});
-
-						TweenMax.to($icon, $ani, { // set all proporties to their dormant states...
-							'left' : '-90px',
-							'opacity' : '0',
-							'top' : '-90px',
-							'onComplete' : $m.g.state,
-							'onCompleteParams' : [$icon, 'none'] // change the icons display to none after the tween has been completed
+						TweenMax.to($icon, $ani, {
+							'boxShadow' : 'none',
+							'top' : '0',
+							'transform' : 'scale(1)'
 						});
 
 						TweenMax.to($sib, $ani, {'opacity' : '1'}); // bring all other images that are not currently being interacted with back to 100% opacity
 
-					}, // end of mouseenter fnc
-
-					onclick : function($this, $c){
-
-						console.log('---> pull up selected social prompt and add click to the user database');
-
-					} // end of onclick fnc
+					} // end of mouseenter fnc
 
 				} // end of actions obj
 
@@ -1303,13 +1484,89 @@ $(document).ready(function(){
 
 
 
+/*
+					return '<div class="container-shadow" data-ref="' + $ref + '" data-type="' + $t + '">' +
+							'<h2 class="main-heading">Share and get an extra entry into the competition</h2>' +
+							'<div class="main-content">' +
+								'<div class="intro">' +
+								'Click on the social media icons below to get your friends and family involved and find out their traveller profile, plus by sharing you\'ll get an extra entry into the draw! The message below will be posted into your chosen social streams(s).' +
+								'</div>' +
+								'<a class="btn nav continue" href="' + $m.s.badgeSelection.url + '" target="_blank">' +
+									'<div class="icon"></div>' +
+									'Continue' +
+								'</a>' +
+							'</div>' +
+							'<div class="alert h3">' +
+								'<div class="icon"></div>' +
+								'You may need to enable popup’s for this page if you are having trouble accessing your social streams' +
+							'</div>' +
+							'<div class="footer">' +
+								'<div class="social-message h3">' +
+									'I just took the Traveller Profile Quiz and am ' + $m.s.badgeSelection.indefiniteArticle + ' ' + $m.s.badgeSelection.kind + '. Take the quiz, discover your travel personality and be in to win a $10,000 holiday!' +
+								'</div>' +
+								'<ul class="social-buttons">' +
+									'<li data-type="facebook">' +
+										'<div class="fb-share-button" data-href="http://www.strivegfx.com/fairfax/sponsored-quiz/" data-type="button" onclick="fbShareClick()"></div>' +
+										//'<div class="icon"></div>' +
+										//'<img src="img/profile-badge-0.png">' +
+									'</li><!--' +
+									'--><li data-type="twitter">' +
+										'<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.strivegfx.com/fairfax/sponsored-quiz" data-text="Try the sponsored quiz and WIN!" data-via="NZStuff" data-count="none">Tweet</a>' +
+										//'<div class="icon"></div>' +
+										//'<img src="img/profile-badge-1.png">' +
+									'</li><!--' +
+									'--><li data-type="googlePlus">' +
+										'<div class="g-plusone" data-size="tall" data-annotation="none" data-callback="googlePlusCallback"></div>' +
+										//'<div class="icon"></div>' +
+										//'<img src="img/profile-badge-2.png">' +
+									'</li><!---->' +
+								'</ul>' +
+							'</div>' +
+						'</div>';
+*/
 
 
 
 
 
-
-
+/*
+						var $html = '<div id="fb-root"></div>' +
+									'<script>' +
+										'window.fbAsyncInit = function() {' +
+											'FB.init({' +
+												'appId : 1449665505263212,' +
+												'status : true,' +
+												'xfbml : true' +
+											'});' +
+											'FB.ui({' +
+													'method: "feed",' +
+													'name: "Sponsored Quiz.",' +
+													'caption: "A caption for the sponsored quiz =)",' +
+													'description: ("This is the sponsored quiz description!"),' + // place description in brackets
+													'link: "http://www.strivegfx.com/fairfax/sponsored-quiz/",' +
+													'picture: "http://www.fbrell.com/public/f8.jpg"' +
+												'},function(response) {' +
+													'if (response && response.post_id) {' +
+														'alert("Post was published.");' +
+													'} else {' +
+														'alert("Post was not published.");' +
+													'}' +
+												'}' +
+											');' +
+											//'FB.Event.subscribe("edge.create", function(response) {' +
+												//'console.log("facebook post");' +
+												//'$("li.facebook").attr({"data-post" : "true"})' +
+											//'});' +
+										'};' +
+										'(function(d, s, id){' +
+											'var js, fjs = d.getElementsByTagName(s)[0];' +
+											'if (d.getElementById(id)) {return;}' +
+											'js = d.createElement(s); js.id = id;' +
+											'js.src = "//connect.facebook.net/en_US/all.js";' +
+											'fjs.parentNode.insertBefore(js, fjs);' +
+										'}(document, "script", "facebook-jssdk"));' +
+									'</script>';
+*/
 
 
 
